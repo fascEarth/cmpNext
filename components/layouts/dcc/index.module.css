@@ -1,0 +1,29 @@
+.loginBg {
+    background-image: url(../../../public/images/pages/dcc/common/loginBg.png);
+    background-repeat: no-repeat;
+    background-color: linear-gradient(45deg,#013850,#0773a5);
+    background-size: cover;
+    background-position: center;
+ }
+ .verticalCenter {
+     height: 100%;
+     display: flex;
+     padding: 30px;
+     justify-content: center;
+     align-items: center;
+ }
+
+ 
+ /********** Rsponsive CSS **********/
+ @media (max-width: 768px) {
+     .verticalCenter {
+         max-width: 450px;
+     }
+     .ResMdDevice {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+     }
+ }
+ 
+ 

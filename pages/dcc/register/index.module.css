@@ -1,0 +1,49 @@
+
+.logo {
+    width: 250px;
+    display: flex;
+    margin: 0 auto;
+}
+.LinkCss {
+    color: #6DCCDD;
+    text-decoration: none;
+}
+.registerBtn {
+    border-radius: 7px;
+    background-color:#015578;
+}
+.registerBtn:hover {
+    background-color: #016d99;
+}
+
+ /********** Tab Css *********/
+ .tabContainer {
+    background-color:#F2F2F2; 
+    border-radius:7px;
+}
+.tabFirst {
+    width: 50%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.87);
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.tabFirst:hover {
+    background-color: #6DCCDD;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+}
+.tabSecond {
+    width: 50%;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.87);
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+.tabSecond:hover {
+    background-color: #6DCCDD;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+

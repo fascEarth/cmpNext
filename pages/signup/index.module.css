@@ -1,0 +1,96 @@
+.stepperBtn {
+  background-color: #015578;
+}
+.stepperBtn:hover {
+  border-color: #015578;
+  background-color: #015578;
+}
+
+/************ Contact Validation CSS ***********/
+.contactHeading {
+  font-size: 20px;
+  font-weight: 400;
+  color: #000;
+}
+.contactP {
+  color:#6b6f82;
+  padding-top: 5px;
+}
+.mailIcon, .mobileIcon, .creditCard {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+}
+.verifiLabel {
+  color: #727272;
+  font-weight: 400;
+  margin-top: 20px;
+}
+.mobileVerifiLabel {
+  color: #727272;
+  font-weight: 400;
+  margin-top: 20px;
+  margin-top: 13px;
+}
+.mobileVerifiP{
+padding-top: 0px !important;
+}
+.mailBorderRight {
+border-right: 2px solid #E4E5F9;
+}
+.rowp {
+  padding: 0 100px !important;
+}
+.commonBtn {
+  background: linear-gradient(45deg, #015578, #6DCCDD);
+}
+.commonBtn:hover {
+  background: linear-gradient(45deg, #015578, #6DCCDD);
+}
+.creditCardContent {
+  position: absolute;
+  left: 0%;
+  right: 0%;
+  text-align: center;
+  margin-top: 25px;
+}
+.otpnum input[type=number]::-webkit-inner-spin-button, 
+.otpnum input[type=number]::-webkit-outer-spin-button { 
+-webkit-appearance: none; 
+margin: 0; 
+}
+.fileLabel label {
+  width: 100%;
+  cursor: pointer;
+}
+
+/*********** Rsponsive CSS ***********/
+@media only screen and (max-width: 600px) {
+  .rowp {
+      padding: 0 15px !important;
+  }
+  .mailBorderRight {
+      border-right: 0px;
+  }
+  .creditCardContent{
+      position: relative;
+      margin-top: 0px;
+  }
+  .xsTop {
+     margin-top: 45px;
+  }
+}
+@media only screen and (min-width:601px) and (max-width:768px) { 
+  .creditCardContent {
+      position: relative;
+      margin-top: 0px;
+  }
+  .xsTop {
+      margin-top: 45px;
+  }
+}
+@media only screen and (min-width:769px) and (max-width:1024px) {
+  .rowp {
+      padding: 0 50px !important;
+  }
+}

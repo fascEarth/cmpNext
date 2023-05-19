@@ -1,0 +1,24 @@
+
+ .logo {
+     width: 250px;
+     display: flex;
+     margin: 0 auto;
+ }
+ .LinkCss {
+     color: #6DCCDD;
+     text-decoration: none;
+ }
+ .loginBtn {
+    border-radius: 7px;
+    background-color:#015578;
+ }
+ .loginBtn:hover {
+     background-color: #016d99;
+ }
+ 
+
+ .otpnum input[type=number]::-webkit-inner-spin-button, 
+.otpnum input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
