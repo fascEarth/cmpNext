@@ -481,7 +481,7 @@ function Signup() {
                              {handleChangeSelect} MenuProps={MenuProps} >
                               <MenuItem value={1}>India</MenuItem>
                               <MenuItem value={2}>Belize</MenuItem>
-                              <MenuItem value={3}>Korea, Democratic People's Republic of Korea</MenuItem>
+                              <MenuItem value={3}>Korea, Democratic People&apos;s Republic of Korea</MenuItem>
                             </Select>
                           </CssFormControl>
                         </Grid>
@@ -653,7 +653,7 @@ function Signup() {
                                 </Typography>
                                 <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
                                   <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interests, including breaching agreements and treaties, 
-                                   harming the Kingdom's reputation, diplomatic relations and political affiliations, or the operational efficiency of 
+                                   harming the Kingdom&apos;s reputation, diplomatic relations and political affiliations, or the operational efficiency of 
                                   security or military operations, the national economy, national infrastructure, or government business.
                                 </Typography>
                                 <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
@@ -679,7 +679,7 @@ function Signup() {
                                   serious and exceptional damage that cannot be remedied or repaired on:
                                 </Typography>
                                 <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interests, including partially harming the Kingdom's 
+                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interests, including partially harming the Kingdom&apos;s 
                                    reputation, diplomatic relations and political affiliations, or the operational efficiency of security or military 
                                     operations, the national economy, national infrastructure, or government business.
                                 </Typography>
@@ -713,7 +713,7 @@ function Signup() {
                                    economic activities in the Kingdom, or on the work of a specific person
                                 </Typography>
                                 <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Limited damage to any entity's assets and limited loss on its 
+                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Limited damage to any entity&apos;s assets and limited loss on its 
                                    financial and competitive position. Limited damage in the short term to environmental or natural resources.
                                 </Typography>
                               </AccordionDetails>

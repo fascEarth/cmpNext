@@ -222,7 +222,7 @@ function ForgotPassword() {
     <DccLayout>
       <Box component="img" align="center" className={styles.logo} sx={{pb: 2, }} alt="Logo" src="/images/pages/dcc/common/logo.png" />
             <Typography component="h4" align="center" variant="h5" sx={{pt: 1, pb: 2, }}>Forgot your password ? 🔒</Typography>
-            <Typography align="left" sx={{color: '#6b6f82' }}>Enter your email address that you used to register. We'll send you an email with a link 
+            <Typography align="left" sx={{color: '#6b6f82' }}>Enter your email address that you used to register. We&apos;ll send you an email with a link 
               to reset your password.</Typography>
             <Box onSubmit={handleSubmit(onSubmit)}  component="form" autoComplete='off' sx={{ mt: 1 }}>
 
