@@ -22,11 +22,11 @@ const nextConfig = {
   },
   production: {
     javaAPI: {
-      BASE_URL: 'http://10.201.92.122:8080',
+      BASE_URL: 'https://10.201.92.122:8080',
       DEFAULT_URL:'/dcc/api/'
     },
     pythonAPI: {
-      BASE_URL: 'http://10.201.92.122:9996',
+      BASE_URL: 'https://10.201.92.122:9996',
       DEFAULT_URL:'/api/dcc/v2/'
     },
   },
