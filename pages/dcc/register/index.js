@@ -43,6 +43,10 @@ import { FormHelperText } from '@mui/material';
 
 
 import ReCAPTCHA from 'react-google-recaptcha';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useAuth } from '../../../utils/context/authContext';
+import { useRouter } from 'next/router';
 
 // Tab function
 function TabPanel(props) {
@@ -128,8 +132,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Register() {
-
-
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { login } = useAuth();
   const [captchaValue, setCaptchaValue] = useState('');
 
   const handleCaptchaChange = (value) => {
@@ -142,50 +147,121 @@ function Register() {
 
   useEffect(() => {
     reset(); // Reset form when component mounts
+/*
+    const sdata = {
+      "email": "raj.yaffy@gmail.com",
+      "pwd":"Raju@1234",
+      "account_type":"personal",
+      "social_login":"0",
+      "tenant_id":"123",
+      "user_serial_id":"312",          
+      "completed_stepper": "2",
+      "payment_card_status": "",
+      "legal_status": false          
+    };  
+    
+    Cookies.set('userData', JSON.stringify(sdata));        
+
+    const user = {name:"signup", role:"signupadmin"};
+    Cookies.set('userRole', JSON.stringify(user));
+    login(user);
+    router.replace("/signup");
+    */
+
   }, [reset]);
 
-
+  const[accounttype,setaccounttype] = useState("personal");
   const [email, setEmail] = useState("");
   //Tab
   const [value, setValue] = useState(0);
-  const handleChange = (event, newValue) => {
+  const handleChange = (event, newValue) => {    
+    if(newValue === 1){
+      setaccounttype("legal");
+    }else{
+      setaccounttype("personal");
+    }
+    
     setValue(newValue);
   };
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   //Personal New Password Show
-  const [showPnewPassword, setShowPnewPassword] = useState(false);
-  const handleClickShowPnewPassword = () => setShowPnewPassword((show) => !show);
-  const handleMouseDownPnewPassword = (event) => {
+
+  const [newpassword, setNewPassword] = useState("");
+  //Password Show
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const handleClickShowNewPassword = () => setShowNewPassword((show) => !show);
+  const handleMouseDownNewPassword = (event) => {
     event.preventDefault();
   };
-  //Personal Confirm Password Show
-  const [showPconfirmPassword, setShowPconfirmPassword] = useState(false);
-  const handleClickShowPconfirmPassword = () => setShowPconfirmPassword((show) => !show);
-  const handleMouseDownPconfirmPassword = (event) => {
+
+  const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
+
+  const [confirmpassword, setConfirmPassword] = useState("");
+  //Password Show
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+  const handleMouseDownConfirmPassword = (event) => {
     event.preventDefault();
   };
+
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
 
   const onSubmit = (data) => {
-    console.log(data.newpassword, data.confirmpassword);
-    if (data.newpassword !== data.confirmpassword) {
-      console.log(data.newpassword, data.confirmpassword);
+        
+    if (data.newpassword !== data.confirmpassword) {      
       toast.error("New password and confirm password should match");
       return;
     } 
-    console.log(data.email, data.newpassword, data.confirmpassword);
-    console.log(isCaptchaValid);
-    console.log(Object.keys(errors));
+    
     if (isCaptchaValid && Object.keys(errors).length === 0) {
-      console.log(data.email, data.newpassword);
+      setIsLoading(true);      
       handleFinal();
     }   
     
    
   };
   async function handleFinal(){
-    console.log("coming");
+    
+
+    const newData = {"email_id": email, "password": newpassword,"account_type":accounttype, "social_login": "0"};
+    const finalData = {data:newData,endPoint:"registerUser"}
+    try {
+      const { data } = await axios.post('/api/dcc/register', finalData); // call the new API route      
+      
+      if( data.status_code == "200"){        
+        const sdata = {
+          "email": email,
+          "pwd":newpassword,
+          "account_type":accounttype,
+          "social_login":"0",
+          "tenant_id":data.tenant_id,
+          "user_serial_id":data.user_serial_id,          
+          "completed_stepper": "2",
+          "payment_card_status": "",
+          "legal_status": false,
+          "email_verify":false,
+          "sms_verify":false          
+        };  
+        
+        Cookies.set('userData', JSON.stringify(sdata));        
+
+        const user = {name:"signup", role:"signupadmin"};
+        Cookies.set('userRole', JSON.stringify(user));
+        login(user);
+        router.replace("/signup");
+
+        toast.success('Signup successful');        
+      }else {
+        setIsLoading(false);              
+        toast.error('Error: '+data.status_code+' ' + data.status_msg);
+      }
+    } catch (error) {
+      setIsLoading(false);            
+      toast.error('An error occurred');
+    }
+
   }
 
 
@@ -224,38 +300,42 @@ function Register() {
                   </FormHelperText>
                 )}
 
-                <CssFormControl margin="normal" fullWidth variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-Pnewpassword">New Password</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-Pnewpassword"
-                    type={showPnewPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPnewPassword}
-                          onMouseDown={handleMouseDownPnewPassword}
-                          edge="end"
-                        >
-                          {showPnewPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="New Password"
-                    name="newpassword"
+<CssFormControl margin="normal" fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-newpassword">New Password</InputLabel>
+                <OutlinedInput 
+              name="newpassword"
+              label="New Password"
+              
 
-                    {...register('newpassword', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 8,
-                        message: 'Password must be at least 8 characters long',
-                      },
-                    })}
-
-                    error={errors.newpassword ? true : false}
+              {...register('newpassword', {
+                required: 'New Password is required',
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters long',
+                },
+              })}
 
 
-                  />
+              value={newpassword}
+              onChange={handleNewPasswordChange}
+              id="outlined-adornment-newpassword"
+                  type={showNewPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowNewPassword}
+                        onMouseDown={handleMouseDownNewPassword}
+                        edge="end"
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+
+                  error={errors.newpassword ? true : false}
+                  
+                />
 
                 {errors.newpassword && (
                   <FormHelperText error>
@@ -264,37 +344,45 @@ function Register() {
                 )}
 
 
-                </CssFormControl>
-                <CssFormControl margin="normal" fullWidth variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-Pconfirmpassword">Confirm New Password</InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-Pconfirmpassword"
-                    type={showPconfirmPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPconfirmPassword}
-                          onMouseDown={handleMouseDownPconfirmPassword}
-                          edge="end"
-                        >
-                          {showPconfirmPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    name="confirmpassword"
-                    label="Confirm New Password"
-                    {...register('confirmpassword', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 8,
-                        message: 'Password must be at least 8 characters long',
-                      },
-                    })}
+              </CssFormControl>
 
-                    error={errors.confirmpassword ? true : false}
+              <CssFormControl margin="normal" fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-confirmpassword">Confirm New Password</InputLabel>
+                <OutlinedInput 
+              name="confirmpassword"
+              label="Confirm New Password"
+              
 
-                  />
+              {...register('confirmpassword', {
+                required: 'Confirm New Password is required',
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters long',
+                },
+                validate: (value) => value === newpassword || 'Passwords do not match'
+              })}
+
+
+              value={confirmpassword}
+              onChange={handleConfirmPasswordChange}
+              id="outlined-adornment-confirmpassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowConfirmPassword}
+                        onMouseDown={handleMouseDownConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+
+                  error={errors.confirmpassword ? true : false}
+                  
+                />
 
                 {errors.confirmpassword && (
                   <FormHelperText error>
@@ -302,7 +390,8 @@ function Register() {
                   </FormHelperText>
                 )}
 
-                </CssFormControl>
+
+              </CssFormControl>
                   
                 <ReCAPTCHA
                 data-next="6Lc5io4hAAAAAKpevcsm1gYAMOrL_iR4uGOl76KO"
@@ -318,8 +407,10 @@ function Register() {
                 />
 
 
-                <Button type="submit" fullWidth variant="contained" size='large' className={styles.registerBtn} sx={{ mt: 3, mb: 2 }}>CREATE 
-                ACCOUNT</Button>
+                <Button disabled={isLoading} type="submit" fullWidth variant="contained" size='large' className={styles.registerBtn} sx={{ mt: 3, mb: 2 }}>
+                  
+                  {isLoading ? 'Loading...' : 'CREATE ACCOUNT'}
+                  </Button>
                 <Grid item align="center">
                   <FormControlLabel sx={{color: '#6b6f82'}} control={<Checkbox value="remember" sx={{color: "#6b6f82", '&.Mui-checked': 
                   {color:'#6DCCDD',},}} />}

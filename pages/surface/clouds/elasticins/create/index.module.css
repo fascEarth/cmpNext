@@ -1,0 +1,18 @@
+.container {
+    padding: 20px;
+  }
+  
+  .orderList {
+    margin-top: 30px;
+  }
+  
+  .orderList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .orderList ul li {
+    margin-bottom: 10px;
+  }
+  

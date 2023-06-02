@@ -41,6 +41,20 @@ export const postApi = async (url, data) => {
   }
 };
 
+export const postApiPayments = async (url, data) => {
+  try {
+    const headers = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Length': JSON.stringify(data).length.toString(),
+    };
+    const response = await api.post(url, data, { headers });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
 export const putApi = async (url, data) => {
   try {
     const response = await api.put(url, data);

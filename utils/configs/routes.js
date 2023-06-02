@@ -6,15 +6,27 @@ import Register from '../../pages/dcc/register';
 import ForgotPassword from '../../pages/dcc/fpwd';
 import Signup from '../../pages/signup';
 import MinstanceList from '../../pages/surface/clouds/elasticins/manage/list';
-
+import MinstanceDetail from '../../pages/surface/clouds/elasticins/manage/detail';
+import Cintstance from '../../pages/surface/clouds/elasticins/create';
 const routes = {
   '/dcc/login': { page: Login, roles: [] },
   '/dcc/register': { page: Register, roles: [] },
   '/dcc/fpwd': { page: ForgotPassword, roles: [] },
   '/signup': { page: Signup, roles: ['signupadmin'] },
+  '/surface/clouds/elasticins/create': {
+    page: Cintstance,
+   //roles: ['admin', 'operator', 'customer'],
+   roles:[]
+  },
   '/surface/clouds/elasticins/manage/list': {
     page: MinstanceList,
-    roles: ['admin', 'operator', 'customer'],
+   //roles: ['admin', 'operator', 'customer'],
+   roles:[]
+  },
+  '/surface/clouds/elasticins/manage/detail': {
+    page: MinstanceDetail,
+   //roles: ['admin', 'operator', 'customer'],
+   roles:[]
   },
 };
 

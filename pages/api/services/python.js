@@ -42,6 +42,7 @@ export const postPyApi = async (url, data) => {
   }
 };
 
+
 export const putPyApi = async (url, data) => {
   try {
     const response = await api.put(url, data);

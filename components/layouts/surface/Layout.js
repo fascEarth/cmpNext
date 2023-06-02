@@ -1,13 +1,17 @@
 import SurfaceHeader from "./Header";
 import SurfaceFooter from "./Footer";
-
-const SurfaceLayout = ({ children }) => {
+import SideMenu from "./SideMenu";
+const SurfaceLayout = ({ currentPage,children }) => {
     return (
       <>
         
         <div>
-        <SurfaceHeader />
-        <main>{children}</main>
+        
+        <main>
+          <SideMenu currentPage={currentPage} >
+          {children}
+          </SideMenu>
+          </main>
         <SurfaceFooter />
       </div>
       

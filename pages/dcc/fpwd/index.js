@@ -80,12 +80,12 @@ const CssFormControl = styled(FormControl)({
 });
 
 function ForgotPassword() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [resetPwd,setResetPwd] = useState(false);
-  const [allowotp,setAllowOtp] = useState(false)
+  const [allowotp,setAllowOtp] = useState(true)
   const [otp, setOtp] = useState('')
-  const handleComplete = (newValue) => {
-    console.log(newValue);
+  const handleComplete = (newValue) => {    
     setOtp(newValue)
     
   }
@@ -129,21 +129,19 @@ function ForgotPassword() {
     
     if(allowotp){
       if(resetPwd){
-        setConfirmPassword(data.confirmpassword)
-      console.log(data.confirmpassword);
-      setNewPassword(data.newpassword)
-      console.log(data.newpassword);
-        console.log("coming");
+        setIsLoading(true);
+        setConfirmPassword(data.confirmpassword)      
+      setNewPassword(data.newpassword)      
         resetPwdUser();
       }else{
-        setOtp(data.otp)
-      console.log(data.otp);
+        setIsLoading(true);
+        setOtp(data.otp)      
       verifyTokenpwd();
       }
       
     }else{
-      setEmail(data.email)
-      console.log(data.email);
+      setIsLoading(true);
+      setEmail(data.email)      
       sendTokenFpwd();
     }
     
@@ -154,22 +152,24 @@ function ForgotPassword() {
     const finalData = {data:newData,endPoint:"resetPwdUser"}
     try {
       const { data } = await axios.post('/api/dcc/fpwd', finalData); // call the new API route
-      console.log(data);
+      
       if( data.status_code == "1000"){
         
-        toast.success(data.message);
+        toast.success("Password resetted successfully!");
 
         setTimeout(() => {
           router.replace("/dcc/login"); 
         }, 5000);
       }else if( data.status_code == "1001"){
+        setIsLoading(false);
         toast.error('Error: ' + data.message);
       }else{
+        setIsLoading(false);
         toast.error('Error: ' + data.message);
       }
   
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);      
       toast.error('An error occurred');
     }
     
@@ -179,18 +179,20 @@ function ForgotPassword() {
     const finalData = {data:newData,endPoint:"verifyUserCode"}
     try {
       const { data } = await axios.post('/api/dcc/fpwd', finalData); // call the new API route
-      console.log(data);
+      
       if( data.status_code == "602"){
         setResetPwd(true);
-        toast.success(data.message);
+        toast.success("Success");
       }else if( data.status_code == "603"){
-        toast.error('Error: ' + data.message);
-      }else{password
+        setIsLoading(false);
+        toast.error('Entered verification code is wrong');
+      }else{
+        setIsLoading(false);
         toast.error('Error: ' + data.message);
       }
   
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);      
       toast.error('An error occurred');
     }
   }
@@ -201,18 +203,20 @@ function ForgotPassword() {
   const finalData = {data:newData,endPoint:"sendCodeToUser"}
   try {
     const { data } = await axios.post('/api/dcc/fpwd', finalData); // call the new API route
-    console.log(data);
+    
     if( data.status_code == "612"){
       setAllowOtp(true);
-      toast.success(data.message);
+      toast.success("Success");
     }else if( data.status_code == "614"){
-      toast.error('Error: ' + data.message);
+      setIsLoading(false);
+      toast.error('Invalid Account');
     }else{
+      setIsLoading(false);
       toast.error('Error: ' + data.message);
     }
 
   } catch (error) {
-    console.error(error);
+    setIsLoading(false);    
     toast.error('An error occurred');
   }
 
@@ -342,7 +346,7 @@ function ForgotPassword() {
               <CssFormControl margin="normal" fullWidth variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-confirmpassword">Confirm New Password</InputLabel>
                 <OutlinedInput 
-              name="newpassword"
+              name="confirmpassword"
               label="Confirm New Password"
               
 
@@ -393,6 +397,7 @@ function ForgotPassword() {
             
             (
               <>
+              <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
               {allowotp ? (
                 <Controller
 
@@ -445,6 +450,7 @@ function ForgotPassword() {
               )
   
   }
+  </CssFormControl>
               </>
               
             )
@@ -458,16 +464,27 @@ function ForgotPassword() {
 
               </Grid>
               </Grid>
-              <Button type="submit" fullWidth variant="contained" size='large' className={styles.forgotpasswordBtn} sx={{ mt: 3, mb: 2 }}>
+              <Button disabled={isLoading} type="submit" fullWidth variant="contained" size='large' className={styles.forgotpasswordBtn} sx={{ mt: 3, mb: 2 }}>
                 {
                   allowotp ? (
                     <>
                     {
-                      resetPwd ? ( "Submit" ) : ( "Verify" )
+                      resetPwd ? ( 
+                        <>
+                        {isLoading ? 'Loading...' : 'Submit'}
+                        </>
+                        
+                        ) : ( 
+                          <>
+                          {isLoading ? 'Loading...' : 'Verify'}
+                          </>
+                          )
                     }
                     </>
                   ) : (
-                    "Send Verification Code"
+                    <>
+                          {isLoading ? 'Loading...' : 'Send Verification Code'}
+                          </>
                   )
                 }
                 </Button>

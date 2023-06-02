@@ -59,6 +59,7 @@ border-right: 2px solid #E4E5F9;
 -webkit-appearance: none; 
 margin: 0; 
 }
+
 .fileLabel label {
   width: 100%;
   cursor: pointer;

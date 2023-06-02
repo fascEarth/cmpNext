@@ -1,0 +1,3 @@
+.otpnum input[type=number]:disabled {
+    cursor: not-allowed;
+  }

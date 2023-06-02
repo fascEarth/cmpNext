@@ -1,6 +1,5 @@
 // ** React Imports
-import { useState } from 'react';
-import Cards from 'react-credit-cards-2';
+import { useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
 import { useAuth } from '../../utils/context/authContext';
@@ -25,47 +24,45 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Tab from '@mui/material/Tab';
-import Modal from '@mui/material/Modal';
+
 import { MuiOtpInput } from 'mui-one-time-password-input';
-import { MuiFileInput } from 'mui-file-input';
 
-// ** Accordion Imports
-import MuiAccordion from '@mui/material/Accordion';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import MuiAccordionSummary from '@mui/material/AccordionSummary';
-
-// ** Date Pickers Imports
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // ** Icons Imports
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import InfoIcon from '@mui/icons-material/Info';
-import BlurCircularOutlinedIcon from '@mui/icons-material/BlurCircularOutlined';
-import DetailsOutlinedIcon from '@mui/icons-material/DetailsOutlined';
-import FilterCenterFocusOutlinedIcon from '@mui/icons-material/FilterCenterFocusOutlined';
-import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import LockIcon from '@mui/icons-material/Lock';
+
 
 // ** Custom Style Imports
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
-import styles from './index.module.css';
+import istyles from './index.module.css';
+
 import StepperCustomDot from './steppercustom.js'
 import StepperWrapper from './steppertheme.js';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import TabContext  from '@mui/lab/TabContext';
 
+
+
+import { useForm, Controller } from 'react-hook-form';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { FormHelperText } from '@mui/material';
+
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
+import devStyles from './developer.module.css';
+import PersonalOrgInfoSubmit from './personalOrgInfo';
+import PaymentMethodsSubmit from './paymentMethods';
+
+
+const styles = {
+  ...istyles,
+  ...devStyles,
+};
 
 
 // ** Header Menu Styles
@@ -100,17 +97,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-// ** Select Field Styles
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+
 
 // TextField Custom Style
 const CssTextField = styled(TextField)({
@@ -156,51 +143,6 @@ const CssFormControl = styled(FormControl)({
   },
 });
 
-// Modal Style 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '75%',
-  bgcolor: '#fafafa',
-  border: '0px solid #000',
-  borderRadius: '7px',
-  boxShadow: 24,
-  p: 4,
-};
-
-// Accordion Style
-const Accordion = styled((props) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  '&:not(:last-child)': {
-    borderBottom: 0,
-  },
-  '&:before': {
-    display: 'none',
-  },
-}));
-
-const AccordionSummary = styled((props) => (
-  <MuiAccordionSummary
-    {...props}
-  />
-))(({ theme }) => ({
-  backgroundColor: '#fff',
-  flexDirection: 'row-reverse',
-  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-    transform: 'rotate(90deg)',
-  },
-}));
-
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: '1px solid rgba(0, 0, 0, .125)',
-  backgroundColor: '#fafafa',
-}));
-
 //** Steeper 
 const steps = [
   {
@@ -220,33 +162,26 @@ const steps = [
   }
 ]
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+
 
 function Signup() {
   
+  const router = useRouter();  
   // START Header Account Dropdown function
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  const { logout } = useAuth();
+
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
-  };
-
-  const { logout } = useAuth();
-  const logoutSurHead =() => {
-    
-    
-    logout();
-    
+  };  
+  const logoutSurHead =() => {        
+    logout();    
   }
-
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -263,75 +198,210 @@ function Signup() {
   // END Header Account Dropdown function
 
   // OTP Function
-  const [otp, setOtp] = useState('')
-  const handleOtpChange = (newValue) => {
-    setOtp(newValue)
-  } 
   const [otpmobile, setmobileOtp] = useState('')
   const handleOtpmobileChange = (newValue) => {
     setmobileOtp(newValue)
   }
 
-  // File Upload Function
-  const [file, setFile] = useState(null)
-  const handleFileChange = (newFile) => {
-    setFile(newFile)
-  }
-
-  // Tab Function
-  const [value, setValue] = useState('personalInfo');
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  // Accordion Function
-  const [expanded, setExpanded] = useState(false);
-  const handleAccChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-  // Modal Function
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  // Credit Cards
-  const [state, setState] = useState({
-    number: '',
-    expiry: '',
-    cvc: '',
-    name: '',
-    focus: '',
-  });
-
-  const handleInputChange = (evt) => {
-    const { name, value } = evt.target;
-    
-    setState((prev) => ({ ...prev, [name]: value }));
-  }
-
-  const handleInputFocus = (evt) => {
-    setState((prev) => ({ ...prev, focus: evt.target.name }));
-  }
-
-
-  // Select Function
-  const [age, setAge] = useState('');
-  const handleChangeSelect = (event) => {
-    setAge(event.target.value);
-  };
-
   // Stepper Function
   // ** States
   const [activeStep, setActiveStep] = useState(0)
-
+  
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-
+  const [cachedInfo, setcachedInfo] = useState(false);
+  const cookies = Cookies.get('userData') 
+  const [paymentDone, setpaymentDone]  = useState(false);
   
+  useEffect(() => {
+    
+    const cachData = (cookies? JSON.parse(cookies) : false);
+    
+    if(cachData){
+      if(cachData.legal_status){
+        setcommonLegalStatus(cachData.legal_status)
+      }
+      
+      setcachedInfo(cachData);
+      setcvEmail(cachData.email);
+      const steppeNum = (Number(cachData.completed_stepper) - 1);
+      
+      if(cachData && steppeNum == 1){
+        getContValid(cachData);
+      }else if(cachData && steppeNum == 2){  
+        // write code for step 2
+      }else if(cachData && steppeNum == 3){  
+        // write code for step 3
+      }else if(cachData && steppeNum == 4){      
+        setpaymentDone(true);
+      }
+      setActiveStep(steppeNum);
 
+    }
+    
+  
+  
+  }, [cookies]);
+
+  const [commonLegalStatus, setcommonLegalStatus] = useState(false);
+  const handlecommonLegalStatusChange = (newVariable) => {
+    setcommonLegalStatus(newVariable);
+  };
+  const handlepaymentDone= (newVariable) => {
+    setpaymentDone(newVariable)
+  }
+
+  const getContValid = async (cookieValue) => {
+    
+
+    if(cookieValue.email_verify){
+      setcvEmailshowVerified(true);
+    }
+    if(cookieValue.sms_verify){
+      setcvMobshowVerified(true);
+    }
+    
+  };
+
+
+  const formcvEmailMethods = useForm();
+
+  const { register, handleSubmit, formState: { errors }, reset, control } = formcvEmailMethods;
+
+  const formcvMobMethods = useForm();
+  const { register: registercvmob, handleSubmit: handleSubmitcvmob, formState: { errors: errorscvmob }, reset: resetcvmob, control: controlcvmob } = formcvMobMethods;
+  
+  const [otp, setOtp] = useState('')
+  const handleComplete = (newValue) => {    
+    setOtp(newValue)
+    
+  }  
+
+  const [cvEmail, setcvEmail] = useState('');
+  const [cvMob, setcvMob] = useState('');
+
+  const [cvEmailshowVerified, setcvEmailshowVerified]  = useState(false); 
+  const [cvMobshowVerified, setcvMobshowVerified]  = useState(false); 
+  
+  async function cvresendtokenEmail() {
+    const newData = {"email_id": cvEmail, "mobile_no": "","reset_password": false};
+      const finalData = {data:newData,endPoint:"resendUserToken"}
+      try {
+        const { data } = await axios.post('/api/signup', finalData); // call the new API route
+        toast.success('Token sent');                    
+        if( data.status_code == "612"){        
+          toast.success('Token sent');        
+        }else {       
+          console.error('Error: '+data.status_code+' ' + data.status_msg); 
+          //toast.error('Error: '+data.status_code+' ' + data.status_msg);
+        }
+      } catch (error) {      
+        toast.error('An error occurred');
+      }
+  }
+
+  const oncvEmailSubmit = async (data) => {    
+
+    const newData = {"email":{"email_id": cvEmail, "token": otp}};
+    const finalData = {data:newData,endPoint:"verifyUserToken"}
+    try {
+      const { data } = await axios.post('/api/signup', finalData); // call the new API route            
+      if( data.status_code == "602"){   
+        setcvEmailshowVerified(true); 
+        const cookies = Cookies.get('userData')  
+        const cachData = (cookies? JSON.parse(cookies) : false);
+        cachData.email_verify = true;
+        if( cvMobshowVerified){
+          
+          cachData.completed_stepper = 3;
+        }
+        Cookies.set('userData', JSON.stringify(cachData)); 
+        
+        
+        toast.success('Success');  
+      }else if( data.status_code == "603"){    
+        toast.error('Invalid OTP');
+      }else if( data.status_code == "604"){              
+        toast.error('OTP Token Expired.');
+      }else {        
+        toast.error('Error: '+data.status_code+' ' + data.status_msg);
+      }
+    } catch (error) {      
+      toast.error('An error occurred');
+    }
+
+    
+  }
+
+  const [cvMobSbt,setcvMobSbt] = useState(false);
+  const [cvmobresendBtn, setcvmobresendBtn] = useState(false);
+  async function cvresendtokenMob(){
+    
+
+    const newData = {"email_id": cvEmail, "mobile_no": cvMob,"reset_password": false};
+    const finalData = {data:newData,endPoint:"resendUserToken"}
+    try {
+      const { data } = await axios.post('/api/signup', finalData); // call the new API route            
+      toast.success('Token sent');        
+      if( data.status_code == "200"){        
+        toast.success('Token sent');        
+      }else {        
+        console.error('Error: '+data.status_code+' ' + data.status_msg); 
+        //toast.error('Error: '+data.status_code+' ' + data.status_msg);
+      }
+    } catch (error) {      
+      toast.error('An error occurred');
+    }
+  }
+
+  const oncvMobileSubmit = async (data) => {
+    
+    if(cvMobSbt){      
+      setcvmobresendBtn(true);
+      cvresendtokenMob()
+    }else{                       
+      const newData = {"sms":{"email_id": cvEmail, "mobile_no":cvMob,"token": otpmobile, "mfa_status":false, 'user_serial_id':cachedInfo.user_serial_id, 'security_enabled':false }};
+      const finalData = {data:newData,endPoint:"verifyUserToken"}
+      try {
+        const { data } = await axios.post('/api/signup', finalData); // call the new API route            
+        if( data.status_code == "600"){ 
+          setcvMobshowVerified(true); 
+          const cookies = Cookies.get('userData')  
+          const cachData = (cookies? JSON.parse(cookies) : false);
+          cachData.sms_verify = true;
+          cachData.mobile_no = cvMob;
+          if(cvEmailshowVerified){
+            
+            cachData.completed_stepper = 3;
+          }
+          
+          Cookies.set('userData', JSON.stringify(cachData)); 
+          
+        
+          
+          toast.success('Success');  
+        }else if( data.status_code == "603"){    
+          toast.error('Invalid OTP');
+        }else if( data.status_code == "601"){              
+          toast.error('SMS Verification failed');
+        }else {        
+          toast.error('Error: '+data.status_code+' ' + data.status_msg);
+        }
+      } catch (error) {      
+        toast.error('An error occurred');
+      }
+
+
+    }
+    
+  } 
+
+  const [allowPOIcsbt, setallowPOIcsbt] = useState(false);
+  const handleallowPOIcsbtChange = (newVariable) => {
+    setallowPOIcsbt(newVariable);
+  };
 
   const  getStepContent = step => {
     switch (step) {
@@ -367,63 +437,249 @@ function Signup() {
                   <Grid item xs={12} sx={{mt:3}}>
                     <Grid container direction="row" rowSpacing={1} spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={`${styles.rowp} ${styles.mailBorderRight}`}>
-                        <Box component="img" align="center" width={80} height={80} className={styles.mailIcon} alt="mail" 
+                        <Box  component="img" align="center" width={80} height={80} className={styles.mailIcon} alt="mail" 
                         src="/images/pages/signup/mail.png" />
-                        <Box component="form" autoComplete='off' sx={{ mt: 1 }}>
-                          <CssTextField margin="normal" autoFocus fullWidth id="email" label="Email Address" name="email" />
+                        <Box onSubmit={handleSubmit(oncvEmailSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+                          <CssTextField 
+                         
+                        {...register('email', {
+                          required: 'Email is required',
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                            message: 'Invalid email address',
+                          },
+                        })}
+                        value={cvEmail}
+                        onChange={(e) => setcvEmail(e.target.value)}
+                        margin="normal"
+                        autoFocus
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        error={errors.email ? true : false}
+                        
+                        InputProps={{
+                          readOnly: true // Add this line to make the text field read-only
+                        }}
+               />
+               {errors.email && (
+                      <FormHelperText error>
+                        {errors.email.message}
+                      </FormHelperText>
+                    )}
                           <Typography align='left' className={styles.verifiLabel}>Enter Verification Code</Typography>
                           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                             <Grid item xs={12}>
                               <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
-                                <MuiOtpInput display="flex" gap={1} className={styles.otpnum} dividerprops={{textAlign:'center'}} TextFieldsProps={{ type:"number"  }}  
-                                 length={6} value={otp} onChange={handleOtpChange} />
+
+                              <Controller
+
+
+
+
+                                name="otp"
+                                control={control}
+                                rules={{
+                                  required: 'OTP is required',
+                                  pattern: {
+                                    value: /^[0-9]{6}$/,
+                                    message: 'OTP must be a 6-digit number',
+                                  },
+                                }}
+                                render={({ field,fieldState }) => (
+
+                                  <Box>
+                                  <MuiOtpInput
+                                    
+                                    display="flex"
+                                    gap={1}
+                                    className={styles.otpnum} dividerprops={{textAlign:'center'}} TextFieldsProps={{ disabled:(cvEmailshowVerified?true:false),type:"text"  }}
+                                    length={6}
+                                    value={cvEmailshowVerified?'******':field.value}
+                                    onChange={(newValue) => {
+                                      field.onChange(newValue); // Manually trigger the field's onChange event
+                                      handleComplete(newValue); // Call your handleComplete function
+                                    }}
+                                  />
+                                {fieldState.invalid && (
+                                <FormHelperText error>{fieldState.error?.message}</FormHelperText>
+                                )}
+                                  </Box>
+
+                                )}
+                              />
+
+
+                               
                               </CssFormControl>
                             </Grid> 
+                            
                             <Grid item xs={12} sm={12} md={6} lg={6} xl={6} sx={{mt:2, pb:3}}>
-                              <Button fullWidth size='large' variant='contained' className={styles.commonBtn}>Resend Code</Button>
+                              {
+                                !cvEmailshowVerified && 
+                                (
+                                  <>
+                                  <Button onClick={cvresendtokenEmail} type="button" fullWidth size='large' variant='contained' className={styles.commonBtn}>Resend Code</Button>
+                                  </>
+                                )
+                              }
+                              
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6} xl={6} sx={{mt:2, pb:3}}>
-                              <Button fullWidth size='large' variant='contained' className={styles.commonBtn}>Verify</Button>
+                            {
+                                !cvEmailshowVerified && 
+                                (
+                                  <>
+                                  <Button  type="submit" fullWidth size='large' variant='contained' className={styles.commonBtn}>Verify</Button>
+                                  </>
+                                )
+                              }
+                              
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                            {cvEmailshowVerified && (
+                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
                               <Box component="img" align="center" width={60} height={60} className={styles.mailIcon} alt="mail" 
                               src="/images/pages/signup/verify.png" />
                               <Typography component="h4" variant="h6" align="center" sx={{fontSize:'18px', fontWeight:"400px"}}>Verified</Typography>
                             </Grid>
+                             )}
                           </Grid>
                         </Box>
                       </Grid>
                       <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={`${styles.rowp} ${styles.xsTop}`}>
                         <Box component="img" align="center" width={80} height={80} className={styles.mobileIcon}  alt="mobile" 
                          src="/images/pages/signup/mobile.png" />
-                        <Box component="form" autoComplete='off' sx={{ mt: 1 }}>
+                        <Box  onSubmit={handleSubmitcvmob(oncvMobileSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
                           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                             <Grid item xs={3}>
-                              <CssTextField margin="normal" fullWidth  value="+911" id="code" name="code" sx={{"& input": {textAlign: "center"} }} />
+                              <CssTextField margin="normal" fullWidth  value="+966" disabled id="code" name="code" sx={{"& input": {textAlign: "center"} }} />
                             </Grid>
                             <Grid item xs={9}>
-                              <CssTextField margin="normal" fullWidth id="mobile" label="Mobile Number" name="mobile" />
+                            <CssTextField 
+                         
+                        {...registercvmob('mobile', {
+                          required: 'Mobile Number is required',
+                          pattern: {
+                            value: /^[0-9]{9}$/,
+    message: 'Invalid mobile number',
+                          },
+                        })}
+                        InputProps={{
+                          readOnly: (cvMobshowVerified?true:false)
+                        }}
+                        
+                        value={cvMobshowVerified?cachedInfo.mobile_no:cvMob}
+                        onChange={(e) => setcvMob(e.target.value)}
+                        margin="normal"
+                        autoFocus
+                        fullWidth
+                        id="mobile"
+                        label="Mobile Number" name="mobile"
+                        error={errorscvmob.mobile ? true : false}
+               />
+               {errorscvmob.mobile && (
+                      <FormHelperText error>
+                        {errorscvmob.mobile.message}
+                      </FormHelperText>
+                    )}
+                              
                             </Grid>
                           </Grid>
                           <Typography align='left' className={styles.verifiLabel}>Enter Verification Code</Typography>
                           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                             <Grid item xs={12}>
-                              <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
-                                <MuiOtpInput display="flex" gap={1} className={styles.otpnum} dividerprops={{textAlign:'center'}} TextFieldsProps={{ type:"number"  }}  
-                                 length={6} value={otpmobile} onChange={handleOtpmobileChange} />
-                              </CssFormControl>
+                            <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
+
+{cvmobresendBtn ? (
+  <Controller
+
+
+
+
+name="otpmobile"
+control={controlcvmob}
+rules={{
+  required: 'OTP is required',
+  pattern: {
+    value: /^[0-9]{6}$/,
+    message: 'OTP must be a 6-digit number',
+  },
+} }
+render={({ field,fieldState }) => (
+
+<Box>
+<MuiOtpInput
+
+display="flex"
+gap={1}
+className={styles.otpnum} dividerprops={{textAlign:'center'}} TextFieldsProps={{ type:"text"  }}
+length={6}
+value={cvMobshowVerified?'******':field.value}
+onChange={(newValue) => {
+field.onChange(newValue); // Manually trigger the field's onChange event
+handleOtpmobileChange(newValue); // Call your handleComplete function
+}}
+/>
+{fieldState.invalid && (
+<FormHelperText error>{fieldState.error?.message}</FormHelperText>
+)}
+</Box>
+
+)}
+/>
+
+) : (
+<MuiOtpInput
+
+display="flex"
+gap={1}
+className={styles.otpnum} dividerprops={{textAlign:'center'}} TextFieldsProps={{ disabled:true,type:"text"  }}
+length={6}
+value={cvMobshowVerified&&'******'}
+
+/>
+  
+)
+}
+
+
+
+ 
+</CssFormControl>
                             </Grid> 
                             <Grid item xs={12} sm={12} md={6} lg={6} xl={6} sx={{mt:2, pb:3}}>
-                              <Button fullWidth size='large' variant='contained' className={styles.commonBtn}>Resend Code</Button>
+                              {
+                                !cvMobshowVerified && 
+
+                                (
+                                  <>
+                                  <Button onClick={cvmobresendBtn ? cvresendtokenMob : () => setcvMobSbt(true)}  type={cvmobresendBtn? 'button' : 'submit'} fullWidth size='large' variant='contained' className={styles.commonBtn}> {cvmobresendBtn? 'Resend Code' : 'Send Code'} </Button>
+                                  </>
+                                )
+                              }
+                              
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6} xl={6} sx={{mt:2, pb:3}}>
-                              <Button fullWidth size='large' variant='contained' className={styles.commonBtn}>Verify</Button>
+                            {
+                                !cvMobshowVerified && 
+
+                                (
+                                  <>
+                                  <Button onClick={() => setcvMobSbt(false)} disabled={cvmobresendBtn?false:true} type="submit" fullWidth size='large' variant='contained' className={styles.commonBtn}>Verify</Button>
+                                  </>
+                                )
+                              }
+                              
                             </Grid>
-                            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                              <Box component="img" align="center" width={60} height={60} className={styles.mailIcon} alt="mail" 
-                              src="/images/pages/signup/verify.png" />
-                              <Typography component="h4" variant="h6" align="center" sx={{fontSize:'18px', fontWeight:"400px"}}>Verified</Typography>
-                            </Grid>
+                            {cvMobshowVerified && (
+                             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                             <Box component="img" align="center" width={60} height={60} className={styles.mailIcon} alt="mail" 
+                             src="/images/pages/signup/verify.png" />
+                             <Typography component="h4" variant="h6" align="center" sx={{fontSize:'18px', fontWeight:"400px"}}>Verified</Typography>
+                           </Grid>
+                             )}
+                           
                           </Grid>
                         </Box>
                       </Grid>
@@ -435,8 +691,8 @@ function Signup() {
                   </Grid>
                 </Grid>
                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', mt:3, }}>
-                  <Button size='large' variant='contained' className={styles.stepperBtn} onClick={handleBack}>Back</Button>
-                  <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
+                  <div className={styles.stepperBtn} ></div>
+                  <Button disabled={(cvEmailshowVerified && cvMobshowVerified)?false:true} size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
                 </Grid>
               </CardContent>
             </Card>
@@ -447,330 +703,16 @@ function Signup() {
           <Container maxWidth="xl" component="main">
             <Card variant="outlined" sx={{mb:3, borderRadius:'7px'}}>
               <CardContent>
-              <Box sx={{ width: '100%' }}>
-                <TabContext value={value}>
+              
+                <PersonalOrgInfoSubmit cachedInfo={cachedInfo} onallowcommonLegalStatus={handlecommonLegalStatusChange} onSubmit={onSubmit} allowPOIcsbt={allowPOIcsbt} onallowPOIcsbtChange={handleallowPOIcsbtChange} commonLegalStatus={commonLegalStatus}  />
 
-                <TabList  onChange={handleChange} aria-label="Personal / Org Information Tabs" TabIndicatorProps={{style: {
-                      backgroundColor: "#6DCCDD"} }} sx={{"& .MuiTab-root.Mui-selected": {color: '#000'}, borderBottom: 1, borderColor: 'divider' }}>
-
-                    
-                      <Tab sx={{color:'#000'}} label="PERSONAL INFO" value='personalInfo' {...a11yProps(0)}  />
-                      <Tab sx={{color:'#000'}} label="BILLING ADDRESS" value='billingAddr' {...a11yProps(1)} />
-                      <Tab sx={{color:'#000'}} label="ORGANIZATION INFO" value='organizationInfo' {...a11yProps(2)} />
-                    </TabList>
-                    
-
-                  
-                  <TabPanel value='personalInfo' index={0} >
-                  
-    <Box component="form" autoComplete='off' sx={{ mt: 1 }}>
-                      <Grid container direction="row" rowSpacing={1} spacing={5}>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth autoFocus id="family" label="Family Name" name="family" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="first" label="First Name" name="first" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="middle" label="Middle Name" name="middle" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth>
-                            <InputLabel id="demo-simple-select-label">Select Nationality</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Select Nationality" onChange= 
-                             {handleChangeSelect} MenuProps={MenuProps} >
-                              <MenuItem value={1}>India</MenuItem>
-                              <MenuItem value={2}>Belize</MenuItem>
-                              <MenuItem value={3}>Korea, Democratic People&apos;s Republic of Korea</MenuItem>
-                            </Select>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                          <Grid container direction="row" rowSpacing={0} spacing={{xs: 2, sm:5, md: 2, lg:2, xl:2}} >
-                            <Grid item xs={12} sm={6} md={5} lg={5} xl={5}>
-                              <CssFormControl margin="normal" fullWidth>
-                                <InputLabel id="demo-simple-select-label">Proof of ID</InputLabel>
-                                <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Proof of ID" onChange= 
-                                {handleChangeSelect} MenuProps={MenuProps} >
-                                  <MenuItem value={1}>National ID</MenuItem>
-                                  <MenuItem value={2}>Iqama</MenuItem>
-                                  <MenuItem value={3}>Passport</MenuItem>
-                                </Select>
-                              </CssFormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
-                              <CssTextField margin="normal" fullWidth id="idnumber" label="ID Number" name="idnumber" />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="issuance" label="Place of Issuance" name="issuance" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl components={['DatePicker']} margin="normal" fullWidth  variant="outlined">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker label="Date of issue" defaultValue={dayjs('04-08-2022')} />
-                            </LocalizationProvider>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl components={['DatePicker']} margin="normal" fullWidth  variant="outlined">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker label="Date of expiry" defaultValue={dayjs('04-08-2022')} />
-                            </LocalizationProvider>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl components={['DatePicker']} margin="normal" fullWidth  variant="outlined">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker label="Date of Birth" defaultValue={dayjs('04-08-2022')} />
-                            </LocalizationProvider>
-                          </CssFormControl>
-                        </Grid>
-                      </Grid>
-                    </Box>
-
-                    
-                  </TabPanel>
-                  <TabPanel value='billingAddr' index={1}  >
-                    <Box component="form" autoComplete='off' sx={{ mt: 1 }}>
-                      <Grid container direction="row" rowSpacing={1} spacing={5}>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth autoFocus id="building" label="Building Number" name="building" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="street" label="Street / Road" name="street" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="postal" label="Postal / Zip Code" name="postal" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="postbox" label="P.O.Box" name="postbox" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth>
-                            <InputLabel id="demo-simple-select-label">City</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" label="City" onChange= 
-                             {handleChangeSelect} MenuProps={MenuProps} >
-                              <MenuItem value={1}>Riyadh</MenuItem>
-                              <MenuItem value={2}>Jeddah</MenuItem>
-                              <MenuItem value={3}>Makkah</MenuItem>
-                              <MenuItem value={4}>Others</MenuItem>
-                            </Select>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth>
-                            <InputLabel id="demo-simple-select-label">Country</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Country" onChange= 
-                             {handleChangeSelect} MenuProps={MenuProps} >
-                              <MenuItem value={1}>Saudi Arabia (KSA)</MenuItem>
-                            </Select>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6} hidden>
-                          <CssTextField margin="normal" fullWidth id="othercity" label="Others City" name="othercity" />
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel value='organizationInfo' index={2} >
-                    <Box component="form" autoComplete='off' sx={{ mt: 1 }}>
-                      <Grid container direction="row" rowSpacing={1} spacing={5}>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth autoFocus id="company" label="Company Name" name="company" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth>
-                            <InputLabel id="demo-simple-select-label">Industry</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Industry" onChange= 
-                             {handleChangeSelect} MenuProps={MenuProps} >
-                              <MenuItem value={1}>Consumer & Industrial Products</MenuItem>
-                              <MenuItem value={2}>Public Sector</MenuItem>
-                              <MenuItem value={3}>Others</MenuItem>
-                            </Select>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6} hidden>
-                          <CssTextField margin="normal" fullWidth id="otherindustry" label="Others Industry" name="otherindustry" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssTextField margin="normal" fullWidth id="commercial" label="Commercial Registration (CR)" name="commercial" />
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth  variant="outlined">
-                            <MuiFileInput className={styles.fileLabel} value={file} onChange={handleFileChange} label="File Upload" placeholder='Allowed - 
-                             *.jpeg, *.jpg, *.png, *.pdf' />
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl components={['DatePicker']} margin="normal" fullWidth  variant="outlined">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker label="Issue Date" defaultValue={dayjs('04-08-2022')} />
-                            </LocalizationProvider>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl components={['DatePicker']} margin="normal" fullWidth  variant="outlined">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker label="Expire Date" defaultValue={dayjs('04-08-2022')} />
-                            </LocalizationProvider>
-                          </CssFormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                            <CssFormControl margin="normal" fullWidth>
-                              <InputLabel id="demo-simple-select-label">Data Classification</InputLabel>
-                              <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Data Classification" onChange= 
-                              {handleChangeSelect} MenuProps={MenuProps} >
-                                <MenuItem value={1}>Public</MenuItem>
-                                <MenuItem value={2}>Restricted</MenuItem>
-                                <MenuItem value={3}>Confidential</MenuItem>
-                              </Select>
-                            </CssFormControl>
-                            <InfoIcon onClick={handleOpen} sx={{fontSize: '40px', color: "#015578",  ml: 1, my: 2, cursor:'pointer'}} />
-                          </Box>
-                        </Grid>
-                        {/* START Data Classification Info Modal */}
-                        <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-                          <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2">Data Classification</Typography>
-                            <Typography id="modal-modal-description" component="p" color={'#6b6f82'} sx={{ mt: 2 }}>Based on the Cloud Computing 
-                              Regulatory Framework, issued by the Saudi Communication, Information, and Technology Commission; Cloud customers need to 
-                              choose the appropriate classification of their data as follows:
-                            </Typography>
-                            <Accordion sx={{mt:3}} expanded={expanded === 'panel1'} onChange={handleAccChange('panel1')}>
-                              <AccordionSummary aria-controls="panel1bh-content" id="panel1bh-header">
-                                <Typography variant="h6" component="h4" fontWeight={400} color={'#6b6f82'} fontSize={16}><BlurCircularOutlinedIcon sx= 
-                                 {{fontSize: '25px', color: "#6b6f82", marginRight: '15px', position:'relative', display:"inline-block", top:'6px'}} /> 
-                                 Extremely Confidential
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={1}>
-                                  Data is classified as (Extremely Confidential) if unauthorized access to this data or its disclosure or its content 
-                                   leads to serious and exceptional damage that cannot be remedied or repaired on:
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interests, including breaching agreements and treaties, 
-                                   harming the Kingdom&apos;s reputation, diplomatic relations and political affiliations, or the operational efficiency of 
-                                  security or military operations, the national economy, national infrastructure, or government business.
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> The performance of government agencies, which is harmful to the 
-                                   national interest.
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Broader individual health and safety and the privacy of senior 
-                                   officials. Environmental or natural resources
-                                </Typography>
-                              </AccordionDetails>
-                            </Accordion>
-                            <Accordion expanded={expanded === 'panel2'} onChange={handleAccChange('panel2')}>
-                              <AccordionSummary aria-controls="panel2bh-content" id="panel2bh-header">
-                                <Typography variant="h6" component="h4" fontWeight={400} color={'#6b6f82'} fontSize={16}><DetailsOutlinedIcon sx= 
-                                 {{fontSize: '25px', color: "#6b6f82", marginRight: '15px', position:'relative', display:"inline-block", top:'6px'}} /> 
-                                 Confidential
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={1}>
-                                 Data is classified as (Confidential) if unauthorized access to this data or its disclosure or its content leads to 
-                                  serious and exceptional damage that cannot be remedied or repaired on:
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interests, including partially harming the Kingdom&apos;s 
-                                   reputation, diplomatic relations and political affiliations, or the operational efficiency of security or military 
-                                    operations, the national economy, national infrastructure, or government business.
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Causes a financial loss at the organizational level that leads to 
-                                   bankruptcy, the inability of the entities to perform their duties, a serious loss of competitiveness, or both.
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Causes serious harm or injury that affects the life of a group of 
-                                   individuals.
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Leads to long-term damage to environmental or natural resources. 
-                                   Investigating major cases as specified by law, such as terrorism financing cases.
-                                </Typography>
-                              </AccordionDetails>
-                            </Accordion>
-                            <Accordion expanded={expanded === 'panel3'} onChange={handleAccChange('panel3')}>
-                              <AccordionSummary aria-controls="panel3bh-content" id="panel3bh-header">
-                                <Typography variant="h6" component="h4" fontWeight={400} color={'#6b6f82'} fontSize={16}><FilterCenterFocusOutlinedIcon 
-                                 sx={{fontSize: '25px', color: "#6b6f82", marginRight: '15px', position:'relative', display:"inline-block", top:'6px'}} /> 
-                                 Restricted
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={1}>
-                                  Data is classified as (Restricted): If unauthorized access to or disclosure of this data or its content leads to:
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> A limited negative impact on the work of government agencies or 
-                                   economic activities in the Kingdom, or on the work of a specific person
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Limited damage to any entity&apos;s assets and limited loss on its 
-                                   financial and competitive position. Limited damage in the short term to environmental or natural resources.
-                                </Typography>
-                              </AccordionDetails>
-                            </Accordion>
-                            <Accordion expanded={expanded === 'panel4'} onChange={handleAccChange('panel4')}>
-                              <AccordionSummary aria-controls="panel4bh-content" id="panel4bh-header">
-                                <Typography variant="h6" component="h4" fontWeight={400} color={'#6b6f82'} fontSize={16}><PublicOutlinedIcon sx= 
-                                 {{fontSize: '25px', color: "#6b6f82", marginRight: '15px', position:'relative', display:"inline-block", top:'6px'}} /> 
-                                 Public
-                                </Typography>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={1}>
-                                  Data is classified as (Public) when unauthorized access to or disclosure of this data or its content does not result in 
-                                  any of the effects mentioned above - in the event that there is no effect on the following:
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> National interest
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Entity activities
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={3} paddingTop={2}>
-                                  <FiberManualRecordIcon sx={{fontSize: '12px'}}  /> Interests of individuals Environmental resources
-                                </Typography>
-                                <Typography component="p" color={'#6b6f82'} paddingLeft={1} paddingTop={2}>
-                                  For more information regarding the Cloud Computing Regulatory Framework please visit CITC website.
-                                </Typography>
-                              </AccordionDetails>
-                            </Accordion>
-                          </Box>
-                        </Modal>
-                        {/* END Data Classification Info Modal */}
-                        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                          <CssFormControl margin="normal" fullWidth>
-                            <InputLabel id="demo-simple-select-label">Purpose</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" label="Purpose" onChange= 
-                             {handleChangeSelect} MenuProps={MenuProps} >
-                              <MenuItem value={1}>Resale</MenuItem>
-                              <MenuItem value={2}>Live support system</MenuItem>
-                              <MenuItem value={3}>Others</MenuItem>
-                            </Select>
-                          </CssFormControl>
-                        </Grid> 
-                      </Grid>
-                    </Box>
-                  </TabPanel>
-                  
-
-                
-                </TabContext>
-
-                </Box>
+                { allowPOIcsbt &&  
                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', mt:3, }}>
-                  <Button size='large' variant='contained' className={styles.stepperBtn} onClick={handleBack}>Back</Button>
-                  <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
+                <div className={styles.stepperBtn} ></div>
+                  <Button size='large' variant='contained' className={styles.stepperBtn}  type='submit' onClick={onSubmit}>Next</Button>
                 </Grid>
+                } 
+                
               </CardContent>
             </Card>
           </Container>
@@ -780,70 +722,16 @@ function Signup() {
           <Container maxWidth="xl" component="main">
             <Card variant="outlined" sx={{mb:3, borderRadius:'7px'}}>
               <CardContent>
-                <Box >
-                  <Grid item xs={12} sx={{mt:2,}}>
-                    <Typography component="h4" variant="h6" align='center' sx={{mb:3}} className={styles.contactHeading}>Add your card for future 
-                    billings</Typography>
-                    <Box component="img" align="center" className={styles.creditCard} alt="credit card" src="/images/pages/signup/creditCard.png" />
-                  </Grid>
-                  <Grid item xs={12} align="center">
-                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} onClick={handleOpen}>ADD CARD</Button>
-                  </Grid>
-                  {/* START Credit Card Add Here */}
-                  <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-                    <Box sx={style}>
-                      <Typography id="modal-modal-title" variant="h6" component="h2">Add Credit Card</Typography>
-                      <Typography id="modal-modal-description" component="p" color={'#6b6f82'} sx={{ mt: 2 }}>Based on the Cloud Computing 
-                        Regulatory Framework, issued by the Saudi Communication, Information, and Technology Commission; Cloud customers need to 
-                        choose the appropriate classification of their data as follows:
-                      </Typography>
-                    </Box>
-                  </Modal>
-                  {/* END Credit Card Add Here */}
-                </Box>
-                {/* START Credit Card Form Design */}
-                <form autoComplete='off' hidden>
-                  <Grid container direction="row" justifyContent="center" alignItems="center" rowSpacing={1} spacing={2} sx={{mt:4}}>
-                    <Grid item xs={12} sm={8} md={7} lg={5} xl={5}>
-                      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        <Cards number={state.number} expiry={state.expiry} cvc={state.cvc} name={state.name} focused={state.focus} />
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{mt:4}}>
-                        {/* <CssTextField margin="normal" fullWidth id="cardnumber" label="Card Numbar" type="number" name="cardnumber" /> */}
-                        <CssTextField margin="normal" fullWidth type="number" name="number" label="Card Number" value={state.number} onChange= 
-                         {handleInputChange} onFocus={handleInputFocus} />
-                      </Grid>
-                      <Grid container direction="row" rowSpacing={1} spacing={2}>
-                        <Grid item xs={12} sm={9} md={9} lg={9} xl={9}>
-                          <CssTextField margin="normal" fullWidth type="text" name="name" label="Name on Card" value={state.name} onChange= 
-                         {handleInputChange} onFocus={handleInputFocus} />
-                        </Grid>
-                        <Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
-                          <CssTextField margin="normal" fullWidth type="tel" name="expiry" label="Expiry" pattern="\d\d/\d\d" value={state.expiry} 
-                           onChange={handleInputChange} onFocus={handleInputFocus} inputProps={{ maxLength: 4 }} />
-                        </Grid>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={12} lg={12} xl={12} align="center">
-                        <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='text'><LockIcon sx={{fontSize: 
-                          '18px', mr:1}} /> Saved</Button>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </form>
-                 {/* END Credit Card Form Design */}
-                <Grid item xs={12} align="center">
-                  <Box className={styles.creditCardContent}>
-                    <Typography component="p" variant="h6" color={'#6DCCDD'} sx={{fontSize:'14px', fontWeight:"400px"}}>
-                      Detacloud charges your card SAR 1 as part of the credit card verification process.
-                    </Typography>
-                    <Typography component="p" variant="h6" color={'#6DCCDD'} sx={{fontSize:'14px', fontWeight:"400px"}}>
-                      We will refunds the SAR 1 after verification is complete.
-                    </Typography>
-                  </Box>
-                </Grid>
+                <PaymentMethodsSubmit allowpaymentDone={handlepaymentDone} cachedInfo={cachedInfo} onallowcommonLegalStatus={handlecommonLegalStatusChange} onSubmit={onSubmit} allowPOIcsbt={allowPOIcsbt} onallowPOIcsbtChange={handleallowPOIcsbtChange} />
                 <Grid item xs={12} sx={{display: 'flex', justifyContent: 'space-between', mt:3, }}>
                   <Button size='large' variant='contained' className={styles.stepperBtn} onClick={handleBack}>Back</Button>
-                  <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
+                  {
+                    paymentDone ?
+                    <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
+                    :
+                    <Button size='large' variant='contained' className={styles.stepperBtn} type='button' >Next</Button>
+                  }
+                  
                 </Grid>
               </CardContent>
             </Card>
@@ -854,7 +742,13 @@ function Signup() {
           <Container maxWidth="xl" component="main">
             <Card variant="outlined" sx={{mb:3, borderRadius:'7px'}}>
               <CardContent>
-                <Box>
+                {
+                  commonLegalStatus ?
+
+                  (
+                    <>
+                    
+                    <Box>
                   <Grid item xs={12} sx={{mt:5,}}>
                     <Box component="img" align="center" width={200} height={200} className={styles.creditCard} alt="success" 
                     src="/images/pages/signup/success.png" />
@@ -866,12 +760,22 @@ function Signup() {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} align="center">
-                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' onClick= 
-                     {onSubmit}>Finish</Button>
+                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' 
+                    onClick={logoutSurHead} >Finish</Button>
                   </Grid>
                 </Box> 
-                {/* START KYC Document Verification */}
-                <Box hidden>
+
+                    </>
+
+                  )
+                  :
+
+                  (
+
+                    <>
+                    
+                     {/* START KYC Document Verification */}
+                <Box >
                   <Grid item xs={12} sx={{mt:5,}}>
                     <Box component="img" align="center" width={200} height={200} className={styles.creditCard} alt="success" 
                     src="/images/pages/signup/kyc.png" />
@@ -888,11 +792,17 @@ function Signup() {
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align="center">
-                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' onClick= 
-                     {onSubmit}>Finish</Button>
+                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' onClick={logoutSurHead} >Finish</Button>
                   </Grid>
                 </Box>
                 {/* END KYC Document Verification */}
+                
+                    </>
+
+                  )
+                }
+               
+               
               </CardContent>
             </Card>
           </Container>
@@ -963,3 +873,4 @@ function Signup() {
 };
 
 export default Signup;
+

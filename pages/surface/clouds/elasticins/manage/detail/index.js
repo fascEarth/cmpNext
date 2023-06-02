@@ -1,14 +1,13 @@
 import styles from './index.module.css';
 import SurfaceLayout from '../../../../../../components/layouts/surface/Layout';
 import Link from 'next/link';
-function MinstanceList() {
-  
+function MinstanceDetail() {
   return (
-    <SurfaceLayout currentPage={0}>
+    <SurfaceLayout>
     <div className={styles.container}>
-      <h1>Welcome to the customer Minstance Lists</h1>
+      <h1>Welcome to the customer Minstance Details</h1>
       <p>Here is where you can manage your account and view your orders.</p>
-      <Link href="detail" variant="body3" > Minstance Detail</Link>
+      <Link href="list" variant="body3" > Minstance List</Link>
       <div className={styles.orderList}>
         <h2>Your Orders</h2>
         <ul>
@@ -24,4 +23,4 @@ function MinstanceList() {
 
 
 
-export default MinstanceList;
+export default MinstanceDetail;

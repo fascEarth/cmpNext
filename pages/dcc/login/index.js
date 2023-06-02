@@ -85,6 +85,15 @@ const CssFormControl = styled(FormControl)({
 
 function Login() {
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingresend, setIsLoadingresend] = useState(false);
+
+  
+  const bCNameLoading = `${styles.loginBtn} ${isLoading ? 'loading' : ''}`;
+
+  const bCNameLoadingResend = `${styles.LinkCss} ${isLoadingresend ? 'loading' : ''}`;
+
+
   const [passProp, setpassProp] = useState("");
   const [tftverify, settftverify] = useState(false);
   const [everify, seteverify] = useState(false);
@@ -123,11 +132,15 @@ function Login() {
   }, [tftverify]);  
 
   const onSubmit = (data) => {
+    
     if(everify){
+      setIsLoading(true);    
       handleCreateNEmailVerify();
     }else if(tftverify){
+      setIsLoading(true);    
       handleCreateNTft();
-    }else{      
+    }else{  
+      setIsLoading(true);    
       handleCreateN();
     }    
   };
@@ -138,17 +151,28 @@ function Login() {
     try {
       const { data } = await axios.post('/api/dcc/login', finalData); // call the new API route      
       if( data.status_code == "600"){
+        toast.success('Success');  
         const user = {name:"surface", role:"admin"}; 
-          Cookies.set('userRole', JSON.stringify(user));
+          Cookies.set('userRole', JSON.stringify(user), 
+          {
+            expires: 7, // Cookie expiry time in days (adjust as needed)
+            path: '/', // Adjust the cookie path as needed
+            secure: true, // Set "secure" only in production
+            sameSite: 'strict', // Adjust sameSite value based on your requirements
+          }
+          );
           login(user);
           router.replace("/surface/clouds/elasticins/manage/list");                
-      }else if( data.status_code == "603"){          
-        console.error(data.data);
-      }else if( data.status_code == "601"){          
-        console.error(data.data);
+      }else if( data.status_code == "603"){  
+        setIsLoading(false);    
+        toast.error('Invalid OTP');                
+      }else if( data.status_code == "601"){   
+        setIsLoading(false);           
+        toast.error('SMS Verification Failed');        
       }  
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);    
+      toast.error('An Error Occured.');        
     }
   }
 
@@ -158,17 +182,26 @@ function Login() {
     try {
       const { data } = await axios.post('/api/dcc/login', finalData); // call the new API route      
       if( data.status_code == "602"){
+        toast.success('Success');        
         const user = {name:"surface", role:"admin"}; 
-          Cookies.set('userRole', JSON.stringify(user));
+          Cookies.set('userRole', JSON.stringify(user),{
+            expires: 7, // Cookie expiry time in days (adjust as needed)
+            path: '/', // Adjust the cookie path as needed
+            secure: true, // Set "secure" only in production
+            sameSite: 'strict', // Adjust sameSite value based on your requirements
+          });
           login(user);
           router.replace("/surface/clouds/elasticins/manage/list");                
-      }else if( data.status_code == "603"){          
-        console.error(data.data);
-      }else if( data.status_code == "604"){          
-        console.error(data.data);
+      }else if( data.status_code == "603"){    
+        setIsLoading(false);          
+        toast.error('Invalid OTP');        
+      }else if( data.status_code == "604"){  
+        setIsLoading(false);            
+        toast.error('Incorrect OTP');        
       }  
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);    
+      toast.error('An Error Occured.');        
     }
   }
     
@@ -180,54 +213,85 @@ function Login() {
       if( data.status_code == "700"){        
         const sdata = JSON.parse(data.data);
         setpassProp(sdata);
-        Cookies.set('userData', JSON.stringify(sdata));
+        Cookies.set('userData', JSON.stringify(sdata),
+        {
+          expires: 7, // Cookie expiry time in days (adjust as needed)
+          path: '/', // Adjust the cookie path as needed
+          secure: true, // Set "secure" only in production
+          sameSite: 'strict', // Adjust sameSite value based on your requirements
+        });
         if (sdata.legal_status && sdata.completed_stepper == 5) {          
             if(!sdata.email_verify){
+              setIsLoading(false);
               seteverify(true);              
               return;
             }    
             if(sdata.mfa_auth){
+              setIsLoading(false);
               settftverify(true);              
               return;              
             }                        
             const user = {name:"surface", role:"admin"}; 
-            Cookies.set('userRole', JSON.stringify(user));
+            Cookies.set('userRole', JSON.stringify(user),
+            {
+              expires: 7, // Cookie expiry time in days (adjust as needed)
+              path: '/', // Adjust the cookie path as needed
+              secure: true, // Set "secure" only in production
+              sameSite: 'strict', // Adjust sameSite value based on your requirements
+            });
             login(user);
             router.replace("/surface/clouds/elasticins/manage/list");                  
         }else{        
           const user = {name:"signup", role:"signupadmin"};
-          Cookies.set('userRole', JSON.stringify(user));
+          Cookies.set('userRole', JSON.stringify(user),
+          {
+            expires: 7, // Cookie expiry time in days (adjust as needed)
+            path: '/', // Adjust the cookie path as needed
+            secure: true, // Set "secure" only in production
+            sameSite: 'strict', // Adjust sameSite value based on your requirements
+          });
           login(user);
           router.replace("/signup");          
         } 
         toast.success('Login successful');        
       }else {
-        console.error(data.message);
-        console.error(data.data);
-        toast.error('Error: ' + data.data);
+        setIsLoading(false);
+        if( data.status_code == "701"){  
+          toast.error('Invalid Credentials');
+        }else if( data.status_code == "702"){  
+          toast.error('This account is not registered with our database');
+        }else{
+          toast.error('Error: ' + data.data);
+        }          
+        
       }
     } catch (error) {
-      console.error(error);
+      setIsLoading(false);      
       toast.error('An error occurred');
     }
   }
 
-  function sendCodeToUser(){        
+  function sendCodeToUser(){     
+    setIsLoadingresend(true);       
     if(everify){      
       const newData = { "email_id":email,"mobile_no":"","reset_password":false};
       const finalData = {data:newData,endPoint:"sendCodeToUser"}
       try {
         const { data } =  axios.post('/api/dcc/login', finalData); // call the new API route                    
-      } catch (error) {
-        console.error(error);
+        setIsLoadingresend(false);       
+      } catch (error) {     
+        setIsLoadingresend(false);       
+        toast.error('An Error Occured.');        
       }
     }else if(tftverify){      
       const newData = { "email_id":email};
       const finalData = {data:newData,endPoint:"tftsendCodeToUser"}
       try {
         const { data } =  axios.post('/api/dcc/login', finalData); // call the new API route                    
-      } catch (error) {
-        console.error(error);
+        setIsLoadingresend(false);       
+      } catch (error) {   
+        setIsLoadingresend(false);            
+        toast.error('An Error Occured.');        
       }
     }         
   }
@@ -286,6 +350,8 @@ function Login() {
                     <CssTextField disabled margin="normal" fullWidth autoFocus id="outlined-basic"  name="email" value={email} />
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>              
+                  
+                      <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
                         <Controller
                         name="otp"
                         control={control}
@@ -314,7 +380,9 @@ function Login() {
                             )}
                           </Box>  
                         )}
-                        />              
+                        />  
+
+</CssFormControl>
                       </Grid>
                     </Grid>
                   </>
@@ -324,6 +392,8 @@ function Login() {
                   <>
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+
+                      <CssFormControl margin="normal" fullWidth sx={{"& input": {textAlign: "center"} }}>
                         <Controller
                         name="tftotp"
                         control={control}
@@ -352,7 +422,10 @@ function Login() {
                             )}
                           </Box>
                         )}
-                        />              
+                        />    
+                        </CssFormControl>
+
+
                       </Grid>
                     </Grid>                  
                   </>
@@ -439,18 +512,20 @@ function Login() {
                 )
             }              
             
-            <Button type="submit" fullWidth size='large' variant="contained" className={styles.loginBtn} sx={{ mt: 3, mb: 3 }}>            
+            <Button disabled={isLoading} type="submit" fullWidth size='large' variant="contained" className={bCNameLoading} sx={{ mt: 3, mb: 3 }}>            
               {
                 (everify || tftverify) ?
                   (
                     <>
-                      Verify
+                    {isLoading ? 'Loading...' : 'Verify'}
+                      
                     </>
                   ) 
                 : 
                   (
                     <>
-                      LOGIN
+                    {isLoading ? 'Loading...' : 'LOGIN'}
+                      
                     </>
                   )
               }
@@ -462,7 +537,9 @@ function Login() {
                   <>
                     <Grid container>
                       <Grid item align="center" xs sx={{ mt: 1,}}>
-                        <Button onClick={sendCodeToUser} type="button" variant="body3" className={styles.LinkCss}>Resend Code</Button>
+                        <Button disabled={isLoadingresend}  onClick={sendCodeToUser} type="button" variant="body3" className={styles.LinkCss} >
+                          {isLoadingresend ? 'Loading...' : 'Resend Code'}
+                        </Button>
                       </Grid>
                     </Grid>
                   </>
