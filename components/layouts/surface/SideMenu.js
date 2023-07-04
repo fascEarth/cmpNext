@@ -18,8 +18,34 @@ import Image from 'next/image';
 
 import styles from './SideMenu.module.css';
 import Link from 'next/link';
-const drawerWidth = 240;
 
+
+
+// ** Nav Styles
+const DetaNav = styled(List) ({
+  '& .MuiListItemButton-root': {
+    '&:hover': {
+      width: '100%',
+      backgroundColor: 'rgba(0, 0, 0, .035)',
+      borderRadius: '5px',
+    },
+    '&.Mui-selected': {
+      width: '100%',
+      color: '#fff',
+      background: 'linear-gradient(45deg,#013850,#0773a5)',
+      borderRadius: '5px',
+    },
+  },
+  '& .MuiListItemIcon-root': {
+    minWidth: 0,
+    marginRight: 20,
+  },
+  '& .MuiSvgIcon-root': {
+    fontSize: 20,
+  },
+});
+
+const drawerWidth = 230;
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -70,7 +96,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-const SideMenu = ({ currentPage, children }) => {
+const SideMenu = ({ currentPage, children, setBackgrd }) => {
+  console.log(setBackgrd);
   console.log(currentPage);
   const [selectedIndex, setSelectedIndex] = useState(currentPage);
   const handleListItemClick = (event, index) => {
@@ -96,175 +123,226 @@ const SideMenu = ({ currentPage, children }) => {
   return (
    
     <Box sx={{ display: 'flex' }}>
-    <SurfaceHeader handleDrawerOpen={handleDrawerOpen} open={open} />
-    <Drawer variant="permanent" open={open}  >
-    
-      <DrawerHeader>
-      {
-            open ?
-            <img  onClick={handleDrawerClose} className={styles.logoimage}  src="/images/pages/common/deta-cloud-logo.png" alt="Logo" />
-      
-      :
-      <img onClick={handleDrawerOpen} height="35" src="/images/pages/common/cloud-icon.png" alt="Logo" />
-      
-      }
+      <SurfaceHeader handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen} open={open} />
+      <Drawer variant="permanent" open={open} >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: 1, }} >
+          <DrawerHeader>
+            {
+              open ?
+              <Image
+              src="/images/pages/common/deta-cloud-logo.png" // Path to your image file
+              alt="My Image"
+              
+              onClick={handleDrawerClose}
+              
+              width={150} 
+              height={35}
 
-      {
-            open &&
-            <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-        </IconButton>
-            
-            
-            
+            />
+
+              
+              :
+              <Image
+              src="/images/pages/common/cloud-icon.png" // Path to your image file
+              alt="My Image"
+              
+              onClick={handleDrawerOpen}
+              width={40} 
+              height={40}
+            />
+
+              
+            }
+
+            {
+              open &&
+              <IconButton onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
+            }
+          </DrawerHeader>
+        </Box>
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', pl:1, pr:1, // Hide overflow by default
+            '&:hover': {
+              overflow: 'auto', // Show overflow when hovering over the side menu
+            },
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: '#f5f5f5',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: '#bdbdbd',
+              borderRadius: '4px',
+              '&:hover': {
+                background: '#a5a5a5',
+              },
+            },
+          }}
+        >
+        <Divider />
+          { open && 
+            <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2,}}>CLOUD SERVICES</Divider>
           }
-
-        
-      </DrawerHeader>
-
-      <Divider />
-
-          {
-            open && <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2,}}>CLOUD SERVICES</Divider>
-          }
-      
-
-      
-      <List>
-          <ListItemButton onClick={handleNestedClick}>
-            <ListItemIcon>
-            <Box component="img" width={20} height={20} align="center" alt="elastic-instance" 
-                  src="/images/pages/common/navicon/darkicon/ElasticInstance.svg" />
-            </ListItemIcon>
-            <ListItemText primary="Elastic Instance" />
-            {nestedOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItemButton>
-          <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-            <Link className={styles.NavLink} href="/surface/clouds/elasticins/manage/list">
-              <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 
-                      0)}>
-                        
+          <DetaNav component="nav" aria-labelledby="nested-list-subheader">
+            <List className={styles.listContainer}>
+              <ListItemButton onClick={handleNestedClick} id="collapsableEI" >
                 <ListItemIcon>
-                <Box component="img" width={7} height={7} align="center" alt="elastic-instance" 
-                        src="/images/pages/common/navicon/darkicon/dot.svg" />
+                  <Box component="img" width={20} height={20} align="center" alt="elastic-instance" 
+                    src="/images/pages/common/navicon/darkicon/ElasticInstance.svg" />
                 </ListItemIcon>
-                <ListItemText primary="Manage Instance" />
-                
+                <ListItemText primary="Elastic Instance" />
+                {nestedOpen ? <ExpandMoreIcon />: <ChevronRightIcon />}
               </ListItemButton>
-              </Link>
-              <Link className={styles.NavLink} href="/surface/clouds/elasticins/create">
-              <ListItemButton sx={{ pl: 4 }} selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 
-                      1)}>
-                <ListItemIcon>
-                <Box component="img" width={7} height={7} align="center" alt="elastic-instance" 
-                        src="/images/pages/common/navicon/darkicon/dot.svg" />
-                </ListItemIcon>
-                <ListItemText primary="Create Instance" />
-              </ListItemButton>
-              </Link>
+              <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link className={styles.NavLink} href="/surface/clouds/elasticins/manage/list">
+                  <ListItemButton sx={{ pl: '16px' }} selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event,           0)}>             
+                    <ListItemIcon sx={{paddingLeft: '6px'}}>
+                      { selectedIndex === 0 ? <Box component="img" width={7} height={7} align="center" alt="elastic-instance" 
+                            src="/images/pages/common/navicon/lighticon/dot.svg" />
+                            :
+                            <Box component="img" width={7} height={7} align="center" alt="elastic-instance" 
+                            src="/images/pages/common/navicon/darkicon/dot.svg" /> 
+                      } 
+                    </ListItemIcon>
+                    <ListItemText primary="Manage Instance" sx={{paddingLeft: '6px'}} />
+                  </ListItemButton>
+                  </Link>
+                  <Link className={styles.NavLink} href="/surface/clouds/elasticins/create">
+                  <ListItemButton sx={{ pl: '16px' }} selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}>
+                    <ListItemIcon sx={{paddingLeft: '6px'}}>
+                      { selectedIndex === 1 ? <Box component="img" width={7} height={7} align="center" alt="Create-instance" 
+                            src="/images/pages/common/navicon/lighticon/dot.svg" />
+                            :
+                            <Box component="img" width={7} height={7} align="center" alt="Create-instance" 
+                            src="/images/pages/common/navicon/darkicon/dot.svg" /> 
+                      } 
+                    </ListItemIcon>
+                    <ListItemText primary="Create Instance" sx={{paddingLeft: '6px'}} />
+                  </ListItemButton>
+                  </Link>
+                </List>
+              </Collapse>
             </List>
-          </Collapse>
-        </List>
-        {
-            open && 
-        <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2, mb: 1}}>NETWORK SERVICES</Divider>
-        }
-                <ListItemButton selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Networks" 
-                    src="/images/pages/common/navicon/darkicon/PrivateNetworks.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Private Networks" />
-                </ListItemButton>
-              
-                <ListItemButton selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Bandwidth" 
-                    src="/images/pages/common/navicon/darkicon/InternetBandwidth.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Internet Bandwidth" />
-                </ListItemButton>
-                {
-            open && 
+            { open && 
+              <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2, mb: 1}}>NETWORK SERVICES</Divider>
+            }
+            <ListItemButton selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}>
+              <ListItemIcon>
+                { selectedIndex === 2 ? <Box component="img" width={20} height={20} align="center" alt="Networks" 
+                  src="/images/pages/common/navicon/lighticon/PrivateNetworks.svg" />
+                  :
+                  <Box component="img" width={20} height={20} align="center" alt="Networks" 
+                  src="/images/pages/common/navicon/darkicon/PrivateNetworks.svg" /> 
+                }
+              </ListItemIcon>
+              <ListItemText primary="Private Networks" />
+            </ListItemButton>
+            <ListItemButton selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3)}>
+              <ListItemIcon>
+                { selectedIndex === 3 ? <Box component="img" width={20} height={20} align="center" alt="Bandwidth" 
+                  src="/images/pages/common/navicon/lighticon/InternetBandwidth.svg" />
+                  :
+                  <Box component="img" width={20} height={20} align="center" alt="Bandwidth" 
+                  src="/images/pages/common/navicon/darkicon/InternetBandwidth.svg" /> 
+                }
+              </ListItemIcon>
+              <ListItemText primary="Internet Bandwidth" />
+            </ListItemButton>
+            { open && 
               <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2, mb: 1}}>BILLING</Divider>
+            }
+            <ListItemButton selected={selectedIndex === 4} onClick={(event) => handleListItemClick(event, 4)}>
+              <ListItemIcon>
+                { selectedIndex === 4 ? <Box component="img" width={20} height={20} align="center" alt="CurrentUsage" 
+                  src="/images/pages/common/navicon/lighticon/CurrentUsage.svg" />
+                  :
+                  <Box component="img" width={20} height={20} align="center" alt="CurrentUsage" 
+                  src="/images/pages/common/navicon/darkicon/CurrentUsage.svg" /> 
                 }
-                <ListItemButton selected={selectedIndex === 4} onClick={(event) => handleListItemClick(event, 4)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="CurrentUsage" 
-                    src="/images/pages/common/navicon/darkicon/CurrentUsage.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Current Usage" />
-                </ListItemButton>
-              
-              
-                <ListItemButton selected={selectedIndex === 5} onClick={(event) => handleListItemClick(event, 5)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Invoice" 
-                    src="/images/pages/common/navicon/darkicon/Invoice.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Invoice" />
-                </ListItemButton>
-
-              
-                <ListItemButton selected={selectedIndex === 6} onClick={(event) => handleListItemClick(event, 6)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Billing" 
-                    src="/images/pages/common/navicon/darkicon/Payment.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Billing Settings" />
-                </ListItemButton>
-                {
-            open && 
+              </ListItemIcon>
+              <ListItemText primary="Current Usage" />
+            </ListItemButton>
+            <ListItemButton selected={selectedIndex === 5} onClick={(event) => handleListItemClick(event, 5)}>
+              <ListItemIcon>
+                { selectedIndex === 5 ? <Box component="img" width={20} height={20} align="center" alt="Invoice" 
+                      src="/images/pages/common/navicon/lighticon/Invoice.svg" />
+                      :
+                      <Box component="img" width={20} height={20} align="center" alt="Invoice" 
+                      src="/images/pages/common/navicon/darkicon/Invoice.svg" /> 
+                    }
+              </ListItemIcon>
+              <ListItemText primary="Invoice" />
+            </ListItemButton>
+            <ListItemButton selected={selectedIndex === 6} onClick={(event) => handleListItemClick(event, 6)}>
+              <ListItemIcon>
+                { selectedIndex === 6 ? <Box component="img" width={20} height={20} align="center" alt="Billing" 
+                      src="/images/pages/common/navicon/lighticon/Payment.svg" />
+                      :
+                      <Box component="img" width={20} height={20} align="center" alt="Billing" 
+                      src="/images/pages/common/navicon/darkicon/Payment.svg" /> 
+                    }
+              </ListItemIcon>
+              <ListItemText primary="Billing Settings" />
+            </ListItemButton>
+            { open && 
               <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2, mb: 1}}>SETTINGS</Divider>
-                }
-
-                <ListItemButton selected={selectedIndex === 7} onClick={(event) => handleListItemClick(event, 7)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Account" 
-                    src="/images/pages/common/navicon/darkicon/Account.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Account" />
-                </ListItemButton>
-              
-              
-                <ListItemButton selected={selectedIndex === 8} onClick={(event) => handleListItemClick(event, 8)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="Security" 
-                    src="/images/pages/common/navicon/darkicon/Shield.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Security" />
-                </ListItemButton>
-              
-                {
-            open && 
+            }
+            <ListItemButton selected={selectedIndex === 7} onClick={(event) => handleListItemClick(event, 7)}>
+              <ListItemIcon>
+                { selectedIndex === 7 ? <Box component="img" width={20} height={20} align="center" alt="Account" 
+                      src="/images/pages/common/navicon/lighticon/Account.svg" />
+                      :
+                      <Box component="img" width={20} height={20} align="center" alt="Account" 
+                      src="/images/pages/common/navicon/darkicon/Account.svg" /> 
+                    }
+              </ListItemIcon>
+              <ListItemText primary="Account" />
+            </ListItemButton>
+            <ListItemButton selected={selectedIndex === 8} onClick={(event) => handleListItemClick(event, 8)}>
+              <ListItemIcon>
+                { selectedIndex === 8 ? <Box component="img" width={20} height={20} align="center" alt="Security" 
+                      src="/images/pages/common/navicon/lighticon/Shield.svg" />
+                      :
+                      <Box component="img" width={20} height={20} align="center" alt="Security" 
+                      src="/images/pages/common/navicon/darkicon/Shield.svg" /> 
+                    }
+              </ListItemIcon>
+              <ListItemText primary="Security" />
+            </ListItemButton>
+            { open && 
               <Divider textAlign="left" sx={{fontSize: '14px', color: '#969696', mt: 2, mb: 1}}>MISC</Divider>
-                }
-
-                <ListItemButton selected={selectedIndex === 9} onClick={(event) => handleListItemClick(event, 9)}>
-                  <ListItemIcon> 
-                    <Box component="img" width={20} height={20} align="center" alt="Support" 
-                    src="/images/pages/common/navicon/darkicon/Support.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="Support" />
-                </ListItemButton>
-              
-              
-                <ListItemButton selected={selectedIndex === 10} onClick={(event) => handleListItemClick(event, 10)}>
-                  <ListItemIcon>
-                    <Box component="img" width={20} height={20} align="center" alt="FAQ" 
-                    src="/images/pages/common/navicon/darkicon/Faq.svg" />
-                  </ListItemIcon>
-                  <ListItemText primary="FAQ" />
-                </ListItemButton>
-              
+            }
+            <ListItemButton selected={selectedIndex === 9} onClick={(event) => handleListItemClick(event, 9)}>
+              <ListItemIcon> 
+                { selectedIndex === 9 ? <Box component="img" width={20} height={20} align="center" alt="Support" 
+                      src="/images/pages/common/navicon/lighticon/Support.svg" />
+                      :
+                      <Box component="img" width={20} height={20} align="center" alt="Support" 
+                      src="/images/pages/common/navicon/darkicon/Support.svg" /> 
+                    }
+              </ListItemIcon>
+              <ListItemText primary="Support" />
+            </ListItemButton>
+            <ListItemButton selected={selectedIndex === 10} onClick={(event) => handleListItemClick(event, 10)}>
+              <ListItemIcon>
+                <Box component="img" width={20} height={20} align="center" alt="FAQ" 
+                src="/images/pages/common/navicon/darkicon/Faq.svg" />
+              </ListItemIcon>
+              <ListItemText primary="FAQ" />
+            </ListItemButton>
+          </DetaNav>
+        </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main"  sx={setBackgrd ? {  position: 'relative',
+    width: '100%',
+    height: '185px', flexGrow: 1, p: 3, background: 'linear-gradient(45deg, #013850, #0773a5) !important' }  :{ flexGrow: 1, p: 3} }  >
         <DrawerHeader />
-
         <div >{children}</div>
       </Box>
     </Box>
+
   );
 };
 

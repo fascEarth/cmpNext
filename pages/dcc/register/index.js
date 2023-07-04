@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, useEffect } from 'react';
-
+import { Buffer } from 'buffer';
 // ** Next Import
 import Link from 'next/link';
 
@@ -224,8 +224,8 @@ function Register() {
   };
   async function handleFinal(){
     
-
-    const newData = {"email_id": email, "password": newpassword,"account_type":accounttype, "social_login": "0"};
+    const npwd = Buffer.from(newpassword).toString('base64');
+    const newData = {"email_id": email, "password": npwd,"account_type":accounttype, "social_login": "0"};
     const finalData = {data:newData,endPoint:"registerUser"}
     try {
       const { data } = await axios.post('/api/dcc/register', finalData); // call the new API route      
@@ -278,7 +278,7 @@ function Register() {
                   <Tab className={styles.tabSecond} label="Legal Entity" {...a11yProps(1)} />
                 </Tabs>
               </Box>
-              <Box onSubmit={handleSubmit(onSubmit)}  component="form" autoComplete='off' sx={{mt: 1}}>
+              <Box onSubmit={handleSubmit(onSubmit)} id="register_form" component="form" autoComplete='off' sx={{mt: 1}}>
                 <CssTextField 
                   {...register('email', {
                     required: 'Email is required',
@@ -309,9 +309,9 @@ function Register() {
 
               {...register('newpassword', {
                 required: 'New Password is required',
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/,
+                  message: 'Please enter a valid password.',
                 },
               })}
 
@@ -355,9 +355,9 @@ function Register() {
 
               {...register('confirmpassword', {
                 required: 'Confirm New Password is required',
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/,
+                  message: 'Please enter a valid password.',
                 },
                 validate: (value) => value === newpassword || 'Passwords do not match'
               })}
@@ -412,7 +412,7 @@ function Register() {
                   {isLoading ? 'Loading...' : 'CREATE ACCOUNT'}
                   </Button>
                 <Grid item align="center">
-                  <FormControlLabel sx={{color: '#6b6f82'}} control={<Checkbox value="remember" sx={{color: "#6b6f82", '&.Mui-checked': 
+                  <FormControlLabel sx={{color: '#6b6f82'}} control={<Checkbox  checked={true} disabled value="remember" sx={{color: "#6b6f82", '&.Mui-checked': 
                   {color:'#6DCCDD',},}} />}
                   label="I agree to the DETASAD Cloud" />
                 </Grid>

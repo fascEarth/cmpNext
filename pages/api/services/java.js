@@ -23,7 +23,9 @@ api.interceptors.request.use(authInterceptor);
 
 export const getApi = async (url) => {
   try {
+   // console.log(url);
     const response = await api.get(url);
+    //console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

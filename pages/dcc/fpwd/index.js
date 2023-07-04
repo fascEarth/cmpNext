@@ -1,7 +1,7 @@
 // ** React Imports
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
+import { Buffer } from 'buffer';
 // ** Next Import
 import Link from 'next/link';
 
@@ -83,7 +83,7 @@ function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [resetPwd,setResetPwd] = useState(false);
-  const [allowotp,setAllowOtp] = useState(true)
+  const [allowotp,setAllowOtp] = useState(false)
   const [otp, setOtp] = useState('')
   const handleComplete = (newValue) => {    
     setOtp(newValue)
@@ -147,8 +147,9 @@ function ForgotPassword() {
     
   };
   async function resetPwdUser(){
-
-    const newData = {"reset_password":{"email_id": email, "new_password":newpassword}};
+    
+    const npwd = Buffer.from(newpassword).toString('base64');
+    const newData = {"reset_password":{"email_id": email, "new_password":npwd}};
     const finalData = {data:newData,endPoint:"resetPwdUser"}
     try {
       const { data } = await axios.post('/api/dcc/fpwd', finalData); // call the new API route
@@ -199,7 +200,7 @@ function ForgotPassword() {
 
   async function sendTokenFpwd(){
 
-    const newData = {"email_id": email, "mobile_no": "", "reset_password": true};
+    const newData = {"email_id": email, "mobile_no": "", "reset_password": true, type:'fpwd'};
   const finalData = {data:newData,endPoint:"sendCodeToUser"}
   try {
     const { data } = await axios.post('/api/dcc/fpwd', finalData); // call the new API route
@@ -228,7 +229,7 @@ function ForgotPassword() {
             <Typography component="h4" align="center" variant="h5" sx={{pt: 1, pb: 2, }}>Forgot your password ? 🔒</Typography>
             <Typography align="left" sx={{color: '#6b6f82' }}>Enter your email address that you used to register. We&apos;ll send you an email with a link 
               to reset your password.</Typography>
-            <Box onSubmit={handleSubmit(onSubmit)}  component="form" autoComplete='off' sx={{ mt: 1 }}>
+            <Box onSubmit={handleSubmit(onSubmit)}  id="fpwd_form" component="form" autoComplete='off' sx={{ mt: 1 }}>
 
             {
             allowotp ? 
@@ -306,9 +307,9 @@ function ForgotPassword() {
 
               {...register('newpassword', {
                 required: 'New Password is required',
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/,
+                  message: 'Please enter a valid password.',
                 },
               })}
 
@@ -352,9 +353,9 @@ function ForgotPassword() {
 
               {...register('confirmpassword', {
                 required: 'Confirm New Password is required',
-                minLength: {
-                  value: 8,
-                  message: 'Password must be at least 8 characters long',
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/,
+                  message: 'Please enter a valid password.',
                 },
                 validate: (value) => value === newpassword || 'Passwords do not match'
               })}

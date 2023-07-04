@@ -1,18 +1,250 @@
-.container {
-    padding: 20px;
-  }
-  
-  .orderList {
-    margin-top: 30px;
-  }
-  
-  .orderList ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .orderList ul li {
-    margin-bottom: 10px;
-  }
-  
+.Footer {
+  width: 100%;
+  height: 100px; 
+  position: fixed; 
+  display: flex;
+  padding: 15px;
+  bottom: 0;
+  margin-left: -24px;
+  background: linear-gradient(45deg, #013850, #0773a5);
+  z-index: 999;
+}
+
+.cardActive {
+  position: relative;
+  border: 2px solid #6DCCDD !important;
+}
+.cardActiveCheck {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  z-index: 1;
+  display: none;
+}  
+.cardActive .cardActiveCheck { 
+  display: inline-block;
+}
+.commingSoon {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/********** Tab CSS **********/
+.tabContainer { 
+  width: 100%;
+  height: 48px;
+  position: relative;
+  margin: 15px auto 0 auto;
+  padding: 0 15px;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
+}
+
+/********* Cloud Server CSS *********/
+.CarouselCard {
+  width: 100%;
+  height: auto;
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  cursor: pointer;
+}
+.CarouselImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 30px 5px rgba(0, 0, 0, .12), 0 8px 10px -7px rgba(0, 0, 0, .2);
+}
+.CarouselImg {
+  transition: 1s;
+}
+.CarouselImg {
+  margin-top: -50px;
+  -webkit-transition: .3s;
+  -webkit-transition: .5s;
+  transition: .5s;
+}
+.CarouselCard:hover .CarouselImg {
+  transition: 1.5s;
+}
+.CarouselCard:hover .CarouselImg {
+  margin-top: -80px;
+}
+.CarouselActiveSelect {
+  position: relative;
+  border: 2px solid #26c6da !important;
+}
+.CarouselActiveCheck {
+  position: absolute;
+  right: 10px;
+  top: -42px;
+}
+
+/************* Profile CSS *************/
+.ProfileCardHeader {
+  background: linear-gradient(45deg,#88d4f5,#228ec1)!important;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+/********* Add Storage CSS **********/
+.diskBox {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  padding: 10px 15px;
+  background: #F4F4F4;
+  color: #000;
+  font-size: 14px;
+  text-transform: capitalize;
+  line-height: 30px;
+  white-space: nowrap;
+}
+.diskSizeBox {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  padding: 6px 0;
+  background: #F4F4F4;
+  color: #000;
+  font-size: 14px;
+  text-transform: capitalize;
+  line-height: 30px;
+  white-space: nowrap;
+}
+.DiskSizeMinus {
+  color: #6DCCDD;
+  position: absolute;
+  left: 10px;
+  top: 13px;
+  cursor: pointer;
+}
+.DiskSizeMinus:hover {
+  color: #015578;
+}
+.DiskSizePlus {
+  color: #6DCCDD;
+  position: absolute;
+  right: 10px;
+  top: 13px;
+  cursor: pointer;
+}
+.DiskSizePlus:hover {
+  color: #015578;
+}
+
+/************* Instance CSS ***********/
+.InstanceInfoIcon {
+  position: absolute;
+  margin-left: 250px;
+  margin-top: -30px;
+  color: #015578;
+  font-size: 30px;
+  cursor: pointer;
+}
+.InstanceInfoDetail {
+  width: 545px;
+  border: 1px solid #c7c7c7;
+  position: absolute;
+  top: -120px;
+  left: -250px;
+  z-index: 1;
+  visibility: hidden;
+}
+.InstanceInfoIcon:hover .InstanceInfoDetail {
+  visibility: visible !important;
+}
+
+/*********** Private Network Modal CSS ************/
+.fieldInfoIcon {
+  position: relative;
+  margin-left: 25px;
+  right: 10px;
+  font-size: 30px;
+  color: #015578;
+  cursor: pointer;
+}
+.PopoveBoxContainer {
+  max-width: 550px !important;
+}
+.PopoverHeader {
+  width: auto;
+  height: 25px;
+  padding: 0 10px;
+  background: #e3e3e3;
+  font-weight: 500;
+  font-size: 14px;
+  margin: 25px 0px 10px 0px;
+  line-height: 27px;
+}
+.PopoverContent {
+  padding: 4px 32px 10px 32px;
+  color: #6b6f82;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+.StaticIpContainer {
+  width: 100%;
+  height: auto;
+  position: relative;
+  display: inline-block;
+  padding: 16.5px 14px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+.StaticIpInfoIcon {
+  position: absolute;
+  font-size: 22px;
+  color: #015578;
+  cursor: pointer;                   
+}
+.StaticIpAddIcon {
+  position: absolute;
+  margin-top: -4px;
+  font-size: 30px;
+  color: #015578;
+  right: 8px;
+  cursor: pointer;                   
+}
+.IpRangeClose {
+  position: relative;
+  margin-left: 8px;
+  right: -6px;
+  font-size: 30px;
+  color: #015578;
+  cursor: pointer;
+}
+
+/*********** Network Bandwidth Speed CSS **********/
+.AddNetworkIcon {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 21px;
+  left: 31%;
+  color: #015578;
+  cursor: pointer;
+}
+.IpRequired {
+  width: 100%;
+  height: 58px;
+  position: relative;
+  display: inline-block;
+  padding: 15px;
+  color: #000;
+  font-weight: 400;
+  background-color: #E5F0F4;
+  border-radius: 12px;
+  line-height: 30px;
+}

@@ -1,5 +1,5 @@
 import { postPyApi,getPyApi } from "../../services/python";
-
+import { Buffer } from 'buffer';
 export default async function fpwd(req, res) {
 
   const { endPoint } = req.body;
@@ -31,8 +31,8 @@ async function resetPwdUser(req, res){
     try {
         
         const { data } = req.body; // get data from request body
-    
-        const rdata = await postPyApi('signup/reset_passwd', JSON.stringify(data)); // call your api function
+        const encryptedPassword = Buffer.from(data.new_password, 'base64').toString('utf-8');
+        const rdata = await postPyApi('signup/reset_passwd', JSON.stringify({ ...data, new_password:encryptedPassword })); // call your api function
         
         const { status_code, task_uid } = rdata; // get task_uid from response data
     

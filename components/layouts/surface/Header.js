@@ -19,7 +19,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import Menu from '@mui/material/Menu';
-const drawerWidth = 240;
+import styles from './SideMenu.module.css';
+
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+const drawerWidth = 230;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -115,8 +119,17 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const SurfaceHeader = ({ handleDrawerOpen, open }) => {
-  
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const SurfaceHeader = ({ handleDrawerClose,handleDrawerOpen, open }) => {
+  const theme = useTheme();
   const { logout } = useAuth();
   function logoutSurHead(){
     Cookies.remove('userRole');
@@ -153,6 +166,18 @@ const renderMenu = (
       <CssBaseline />
       <AppBar position="fixed" open={open} >
         <Toolbar>
+        <DrawerHeader  className={styles.drawerheaderleft}>
+      {
+            !open && 
+            <span onClick={handleDrawerOpen} style={{ display: 'inline-block', height: '35px', width: '35px', backgroundColor: 'transparent' }}></span>
+      
+      }
+
+     
+
+        
+      </DrawerHeader>
+
         <Search>
               <SearchIconWrapper>
                 <SearchIcon />

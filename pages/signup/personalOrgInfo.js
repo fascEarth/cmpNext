@@ -386,9 +386,25 @@ const handleChange = (event, newValue) => {
       const unformattedDate = dayjs(formattedData, 'MM-DD-YYYY').subtract(1, 'day');
       setissueDateUn(unformattedDate);
     }
+
+    const [idProofMin, setidProofMin] = useState(10);
+    const [idProofMax, setidProofMax] = useState(10);
+    const [idProofRegex, setidProofRegex] = useState(/^[\w.]+$/i);
     const handleInputChange = (evt) => {
      
       const { name, value } = evt.target || evt;
+      console.log(name);
+      console.log(value);
+      if(name == 'idProof'){
+        if(value == "Passport"){
+          setidProofMin(5);
+          setidProofRegex(/^[\w.]+$/)
+          
+        }else{
+          setidProofMin(10);
+          setidProofRegex(/^\d+$/)
+        }
+      }
       
       setpoiPIstate((prev) => ({ ...prev, [name]: value }));
     }
@@ -551,10 +567,12 @@ const finalSbtPOI = () => {
    updatePoiFinalSbt(cfinalData);
     
   }else{
+    console.log(cachedInfo);
     cfinalData.profile.userSerialId = cachedInfo.user_serial_id;
-
+    console.log(cfinalData);
+    if(cachedInfo.account_type == "legal"){
     cfinalData.organization.tenantId = cachedInfo.tenant_id;
-    
+    }
     addPoiFinalSbt(cfinalData);
     
   }
@@ -2051,7 +2069,7 @@ if (ispoiOrgstateFilled) {
           
           <TabPanel value='personalInfo' index={0} >
           
-<Box onSubmit={handleSubmitpoiPersonalInfo(onpoiPersonalInfoSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+<Box onSubmit={handleSubmitpoiPersonalInfo(onpoiPersonalInfoSubmit)} id="poipersonalinfosubmitform" component="form" autoComplete='off' sx={{ mt: 1 }}>
               <Grid container direction="row" rowSpacing={1} spacing={5}>
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField {...registerpoiPersonalInfo('familyName', {
@@ -2148,7 +2166,20 @@ if (ispoiOrgstateFilled) {
                     <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
                       <CssTextField 
                       {...registerpoiPersonalInfo('idProofNo', {
-                        required: 'ID Number is required'
+                        required: 'ID Number is required',
+                        pattern: {
+                          value: idProofRegex,
+                          message: 'Invalid ID Proof',
+                        },
+                        minLength: {
+                          value: idProofMin, // Set the minimum length
+                          message: 'ID Proof Number should be at least '+idProofMin+' characters',
+                        },
+                        maxLength: {
+                          value: idProofMax, // Set the maximum length
+                          message: 'ID Proof Number should not exceed '+idProofMax+' characters',
+                        },
+
                       })}
 
                       value={poiPIstate.idProofNo}
@@ -2170,7 +2201,11 @@ if (ispoiOrgstateFilled) {
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField
                   {...registerpoiPersonalInfo('placeOfIssuance', {
-                    required: 'Place of issuance is required'
+                    required: 'Place of issuance is required',
+                    pattern: {
+                      value: /^[A-Za-z]+$/,
+                      message: 'Invalid Place of Issuance (letters only)',
+                    },
                   })}
 
                   value={poiPIstate.placeOfIssuance}
@@ -2308,7 +2343,7 @@ if (ispoiOrgstateFilled) {
             
           </TabPanel>
           <TabPanel value='billingAddr' index={1}  >
-            <Box onSubmit={handleSubmitpoiBillingAddr(onpoiBillingAddrSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+            <Box onSubmit={handleSubmitpoiBillingAddr(onpoiBillingAddrSubmit)} id="poibillingaddrsubmit_form" component="form" autoComplete='off' sx={{ mt: 1 }}>
               <Grid container direction="row" rowSpacing={1} spacing={5}>
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField margin="normal" fullWidth autoFocus id="building" label="Building Number"
@@ -2350,9 +2385,17 @@ if (ispoiOrgstateFilled) {
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField margin="normal" fullWidth id="postal" label="Postal / Zip Code" 
                   name="zipCode" 
-
+                  type="number"
                   {...registerpoiBillingAddr('zipCode', {
-                   required: 'zipCode is required'
+                   required: 'zipCode is required',
+                   minLength: {
+                    value: 3, // Set the minimum length
+                    message: 'Zip code should be at least 3 digits',
+                  },
+                  maxLength: {
+                    value: 5, // Set the maximum length
+                    message: 'Zip code should not exceed 5 digits',
+                  },
                  })}  
                   value={poiBIstate.zipCode} onChange= 
                   {handleInputChangeBillingAddr} onFocus={handleInputFocusBillingAddr}
@@ -2366,9 +2409,17 @@ if (ispoiOrgstateFilled) {
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField margin="normal" fullWidth id="postbox" label="P.O.Box" 
                    name="postBox" 
-
+                   type="number"
                    {...registerpoiBillingAddr('postBox', {
-                    required: 'postBox is required'
+                    required: 'postBox is required',
+                    minLength: {
+                      value: 3, // Set the minimum length
+                      message: 'Postbox Number should be at least 3 digits',
+                    },
+                    maxLength: {
+                      value: 5, // Set the maximum length
+                      message: 'Postbox Number should not exceed 5 digits',
+                    },
                   })}  
                    value={poiBIstate.postBox} onChange= 
                    {handleInputChangeBillingAddr} onFocus={handleInputFocusBillingAddr}
@@ -2460,7 +2511,7 @@ if (ispoiOrgstateFilled) {
             </Box>
           </TabPanel>
           <TabPanel value='organizationInfo' index={2} >
-            <Box onSubmit={handleSubmitpoiOrgInfo(onpoiOrgInfoSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+            <Box onSubmit={handleSubmitpoiOrgInfo(onpoiOrgInfoSubmit)} id="poiorginfosubmit_form" component="form" autoComplete='off' sx={{ mt: 1 }}>
               <Grid container direction="row" rowSpacing={1} spacing={5}>
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                   <CssTextField margin="normal" fullWidth autoFocus id="company" label="Company Name" 

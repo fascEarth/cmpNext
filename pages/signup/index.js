@@ -214,6 +214,15 @@ function Signup() {
   const [cachedInfo, setcachedInfo] = useState(false);
   const cookies = Cookies.get('userData') 
   const [paymentDone, setpaymentDone]  = useState(false);
+  const [commonProStatus,setcommonProStatus] = useState(false);
+
+  const onSubmit = () => {
+    setActiveStep(activeStep + 1)
+  }
+
+  const renderContent = () => {
+    return getStepContent(activeStep)
+  }
   
   useEffect(() => {
     
@@ -222,6 +231,9 @@ function Signup() {
     if(cachData){
       if(cachData.legal_status){
         setcommonLegalStatus(cachData.legal_status)
+      }
+      if(cachData.tenant_active_status){
+        setcommonProStatus(true)
       }
       
       setcachedInfo(cachData);
@@ -236,6 +248,7 @@ function Signup() {
         // write code for step 3
       }else if(cachData && steppeNum == 4){      
         setpaymentDone(true);
+        callFinProvision();
       }
       setActiveStep(steppeNum);
 
@@ -284,9 +297,32 @@ function Signup() {
 
   const [cvEmailshowVerified, setcvEmailshowVerified]  = useState(false); 
   const [cvMobshowVerified, setcvMobshowVerified]  = useState(false); 
-  
+  async function precallFinProvision(){
+    setActiveStep(activeStep + 1);
+    callFinProvision();
+  }
+  async function callFinProvision(){
+    
+    const finalData = {data:[],tenantId:cachedInfo.tenant_id, userSerialId:cachedInfo.user_serial_id,endPoint:"finalProvisioning"}
+    try {
+      const { data } = await axios.post('/api/signup', finalData); // call the new API route
+      console.log(data);
+      
+      if( data.status == "ok" && data.message){  
+        
+        setcommonProStatus(true);
+        
+      }else{
+        setTimeout(() => {      
+          callFinProvision();
+        },40000);
+      }
+    } catch (error) {      
+      toast.error('An error occurred');
+    }
+  }
   async function cvresendtokenEmail() {
-    const newData = {"email_id": cvEmail, "mobile_no": "","reset_password": false};
+    const newData = {"email_id": cvEmail, "mobile_no": "","reset_password": false, "type":'signupEmail'};
       const finalData = {data:newData,endPoint:"resendUserToken"}
       try {
         const { data } = await axios.post('/api/signup', finalData); // call the new API route
@@ -317,14 +353,16 @@ function Signup() {
           
           cachData.completed_stepper = 3;
         }
-        Cookies.set('userData', JSON.stringify(cachData)); 
+        setTimeout(function(){
+          Cookies.set('userData', JSON.stringify(cachData)); 
+        },300);
         
         
         toast.success('Success');  
       }else if( data.status_code == "603"){    
         toast.error('Invalid OTP');
       }else if( data.status_code == "604"){              
-        toast.error('OTP Token Expired.');
+        toast.error('OTP has been Expired.');
       }else {        
         toast.error('Error: '+data.status_code+' ' + data.status_msg);
       }
@@ -340,7 +378,7 @@ function Signup() {
   async function cvresendtokenMob(){
     
 
-    const newData = {"email_id": cvEmail, "mobile_no": cvMob,"reset_password": false};
+    const newData = {"email_id": cvEmail, "mobile_no": cvMob,"reset_password": false, "type":"signupMobile"};
     const finalData = {data:newData,endPoint:"resendUserToken"}
     try {
       const { data } = await axios.post('/api/signup', finalData); // call the new API route            
@@ -367,6 +405,7 @@ function Signup() {
       try {
         const { data } = await axios.post('/api/signup', finalData); // call the new API route            
         if( data.status_code == "600"){ 
+          
           setcvMobshowVerified(true); 
           const cookies = Cookies.get('userData')  
           const cachData = (cookies? JSON.parse(cookies) : false);
@@ -376,16 +415,20 @@ function Signup() {
             
             cachData.completed_stepper = 3;
           }
+          setTimeout(function(){
+            Cookies.set('userData', JSON.stringify(cachData)); 
+          },300);
           
-          Cookies.set('userData', JSON.stringify(cachData)); 
           
         
           
           toast.success('Success');  
         }else if( data.status_code == "603"){    
+          toast.error('Mobile number is already registered.');
+        }else if( data.status_code == "605"){    
           toast.error('Invalid OTP');
         }else if( data.status_code == "601"){              
-          toast.error('SMS Verification failed');
+          toast.error('OTP has been expired');
         }else {        
           toast.error('Error: '+data.status_code+' ' + data.status_msg);
         }
@@ -439,7 +482,7 @@ function Signup() {
                       <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={`${styles.rowp} ${styles.mailBorderRight}`}>
                         <Box  component="img" align="center" width={80} height={80} className={styles.mailIcon} alt="mail" 
                         src="/images/pages/signup/mail.png" />
-                        <Box onSubmit={handleSubmit(oncvEmailSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+                        <Box onSubmit={handleSubmit(oncvEmailSubmit)} id="cvemailsubmit_form" component="form" autoComplete='off' sx={{ mt: 1 }}>
                           <CssTextField 
                          
                         {...register('email', {
@@ -550,7 +593,7 @@ function Signup() {
                       <Grid item xs={12} sm={12} md={6} lg={6} xl={6} className={`${styles.rowp} ${styles.xsTop}`}>
                         <Box component="img" align="center" width={80} height={80} className={styles.mobileIcon}  alt="mobile" 
                          src="/images/pages/signup/mobile.png" />
-                        <Box  onSubmit={handleSubmitcvmob(oncvMobileSubmit)} component="form" autoComplete='off' sx={{ mt: 1 }}>
+                        <Box  onSubmit={handleSubmitcvmob(oncvMobileSubmit)} id="cvmobilesupportform" component="form" autoComplete='off' sx={{ mt: 1 }}>
                           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1, lg:2, xl:3 }}>
                             <Grid item xs={3}>
                               <CssTextField margin="normal" fullWidth  value="+966" disabled id="code" name="code" sx={{"& input": {textAlign: "center"} }} />
@@ -570,7 +613,7 @@ function Signup() {
                         }}
                         
                         value={cvMobshowVerified?cachedInfo.mobile_no:cvMob}
-                        onChange={(e) => setcvMob(e.target.value)}
+                        onChange={(e) => setcvMob(e.target.value || '')}
                         margin="normal"
                         autoFocus
                         fullWidth
@@ -727,7 +770,7 @@ value={cvMobshowVerified&&'******'}
                   <Button size='large' variant='contained' className={styles.stepperBtn} onClick={handleBack}>Back</Button>
                   {
                     paymentDone ?
-                    <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={onSubmit}>Next</Button>
+                    <Button size='large' variant='contained' className={styles.stepperBtn} type='submit' onClick={precallFinProvision}>Next</Button>
                     :
                     <Button size='large' variant='contained' className={styles.stepperBtn} type='button' >Next</Button>
                   }
@@ -760,8 +803,15 @@ value={cvMobshowVerified&&'******'}
                     </Typography>
                   </Grid>
                   <Grid item xs={12} align="center">
-                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' 
+                    {
+                      commonProStatus ?
+                      <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' 
                     onClick={logoutSurHead} >Finish</Button>
+                    :
+                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='button' 
+                     >Provisioning. Please Wait...</Button>
+                    }
+                    
                   </Grid>
                 </Box> 
 
@@ -792,7 +842,14 @@ value={cvMobshowVerified&&'******'}
                     </Grid>
                   </Grid>
                   <Grid item xs={12} align="center">
-                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' onClick={logoutSurHead} >Finish</Button>
+                  {
+                      commonProStatus ?
+                      <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='submit' onClick={logoutSurHead} >Finish</Button>
+                    :
+                    <Button size='large' variant='contained' sx={{mt:3, mb:4}} className={styles.commonBtn} type='button' 
+                     >Provisioning. Please Wait...</Button>
+                    }
+                    
                   </Grid>
                 </Box>
                 {/* END KYC Document Verification */}
@@ -813,13 +870,7 @@ value={cvMobshowVerified&&'******'}
     }
   }
 
-  const onSubmit = () => {
-    setActiveStep(activeStep + 1)
-  }
 
-  const renderContent = () => {
-    return getStepContent(activeStep)
-  }
   
   
   return (

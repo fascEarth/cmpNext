@@ -15,4 +15,9 @@
   .orderList ul li {
     margin-bottom: 10px;
   }
+ .contentWrapper {
+  
+  background: linear-gradient(45deg,#013850,#0773a5)!important;
+ 
+}
   

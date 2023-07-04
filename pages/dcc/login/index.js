@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { Buffer } from 'buffer';
 // ** Next Import
 import Link from 'next/link';
 import  { useRouter } from "next/router";
@@ -132,7 +133,7 @@ function Login() {
   }, [tftverify]);  
 
   const onSubmit = (data) => {
-    
+    console.log(data);
     if(everify){
       setIsLoading(true);    
       handleCreateNEmailVerify();
@@ -163,9 +164,12 @@ function Login() {
           );
           login(user);
           router.replace("/surface/clouds/elasticins/manage/list");                
+        }else if( data.status_code == "605"){      
+          setIsLoading(false);    
+          toast.error('Incorrect OTP');   
       }else if( data.status_code == "603"){  
         setIsLoading(false);    
-        toast.error('Invalid OTP');                
+        toast.error('Mobile number already registered');                
       }else if( data.status_code == "601"){   
         setIsLoading(false);           
         toast.error('SMS Verification Failed');        
@@ -195,7 +199,7 @@ function Login() {
       }else if( data.status_code == "603"){    
         setIsLoading(false);          
         toast.error('Invalid OTP');        
-      }else if( data.status_code == "604"){  
+      }else if( data.status_code == "604" || data.status_code == "605"){  
         setIsLoading(false);            
         toast.error('Incorrect OTP');        
       }  
@@ -206,7 +210,8 @@ function Login() {
   }
     
   async function handleCreateN(){
-    const newData = {"userName": email, "password": password, "social_login": "0"};
+    const npwd = Buffer.from(password).toString('base64');
+    const newData = {"userName": email, "password": npwd, "social_login": "0"};
     const finalData = {data:newData,endPoint:"loginUser"}
     try {
       const { data } = await axios.post('/api/dcc/login', finalData); // call the new API route      
@@ -260,6 +265,10 @@ function Login() {
           toast.error('Invalid Credentials');
         }else if( data.status_code == "702"){  
           toast.error('This account is not registered with our database');
+        }else if( data.status_code == "703"){  
+          toast.error('This account is not activated by the owner');  
+        }else if( data.status_code == "707"){  
+          toast.error('An error occurred');
         }else{
           toast.error('Error: ' + data.data);
         }          
@@ -274,21 +283,23 @@ function Login() {
   function sendCodeToUser(){     
     setIsLoadingresend(true);       
     if(everify){      
-      const newData = { "email_id":email,"mobile_no":"","reset_password":false};
+      const newData = { "email_id":email,"mobile_no":"","reset_password":false, 'type':'loginEmail'};
       const finalData = {data:newData,endPoint:"sendCodeToUser"}
       try {
         const { data } =  axios.post('/api/dcc/login', finalData); // call the new API route                    
         setIsLoadingresend(false);       
+        toast.error('OTP sent successfully!');        
       } catch (error) {     
         setIsLoadingresend(false);       
         toast.error('An Error Occured.');        
       }
     }else if(tftverify){      
-      const newData = { "email_id":email};
+      const newData = { "email_id":email, 'type':'logintfa'};
       const finalData = {data:newData,endPoint:"tftsendCodeToUser"}
       try {
         const { data } =  axios.post('/api/dcc/login', finalData); // call the new API route                    
-        setIsLoadingresend(false);       
+        setIsLoadingresend(false);  
+        toast.error('OTP sent successfully!');             
       } catch (error) {   
         setIsLoadingresend(false);            
         toast.error('An Error Occured.');        
@@ -342,7 +353,7 @@ function Login() {
                 )
             }
           </Typography>            
-          <Box onSubmit={handleSubmit(onSubmit)}  component="form" autoComplete='off' sx={{ mt: 1 }}>            
+          <Box onSubmit={handleSubmit(onSubmit)} id="login_form" component="form" autoComplete='off' sx={{ mt: 1 }}>            
             {
               everify ?
                 (
@@ -434,7 +445,8 @@ function Login() {
                 (
                   <>
                     <CssTextField margin="normal" autoFocus fullWidth  id="email"
-                    name="email"              
+                    name="email"  
+                    autoComplete="username" // Add the autoComplete attribute here                    
                     {...register('email', {
                       required: 'Email is required',
                       pattern: {
@@ -455,12 +467,14 @@ function Login() {
                       <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                       <OutlinedInput 
                       name="password"
-                      label="Password"            
+                      label="Password"    
+                      autoComplete="current-password" // Add the autoComplete attribute here        
                       {...register('password', {
                         required: 'Password is required',
-                        minLength: {
-                          value: 8,
-                          message: 'Password must be at least 8 characters long',
+                        
+                        pattern: {
+                          value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?!.*\s).{8,16}$/,
+                          message: 'Please enter a valid password.',
                         },
                       })}
                       value={password}

@@ -5,7 +5,10 @@ export default async function signup(req, res) {
 
   const { endPoint } = req.body;
   
-  switch (endPoint) {    
+  switch (endPoint) {  
+    case 'finalProvisioning':
+      await finalProvisioning(req, res);
+      break;  
     case 'getallpmethodsinfo':
       await getallpmethodsinfo(req, res);
       break;
@@ -40,7 +43,30 @@ export default async function signup(req, res) {
     
   }
 
- 
+  async function finalProvisioning(req, res){
+   
+    try {
+        
+      const { tenantId } = req.body; // get data from request body
+      // Get client's IP address
+      const { userSerialId } = req.body;
+      const clientIP = req.socket.remoteAddress;
+      
+      const formedURI = tenantId+"?userserialid="+userSerialId+"&ipaddress="+clientIP;
+      
+      const rdata = await getApi('tenant/gettenantactivestatus/'+formedURI); // call your api function
+      //console.log(counter);
+      //console.log(rdata);
+      res.status(200).json(rdata);
+      
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+
+  }
+
 
   async function getallpmethodsinfo(req, res){
     try {

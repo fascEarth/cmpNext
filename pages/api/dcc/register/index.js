@@ -1,5 +1,5 @@
 import { postPyApi,getPyApi } from "../../services/python";
-
+import { Buffer } from 'buffer';
 export default async function register(req, res) {
 
   const { endPoint } = req.body;
@@ -22,8 +22,8 @@ export default async function register(req, res) {
     try {
       
       const { data } = req.body; // get data from request body
-      
-      const rdata = await postPyApi('signup/create_account', JSON.stringify(data)); // call your api function
+      const encryptedPassword = Buffer.from(data.password, 'base64').toString('utf-8');
+      const rdata = await postPyApi('signup/create_account', JSON.stringify({ ...data, password:encryptedPassword })); // call your api function
       
       const { status_code, task_uid } = rdata; // get task_uid from response data
   
