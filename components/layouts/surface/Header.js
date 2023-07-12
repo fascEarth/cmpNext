@@ -14,15 +14,19 @@ import InputBase from '@mui/material/InputBase';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import Menu from '@mui/material/Menu';
 import styles from './SideMenu.module.css';
-
+import Image from 'next/image';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+
 const drawerWidth = 230;
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -128,14 +132,26 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const SurfaceHeader = ({ handleDrawerClose,handleDrawerOpen, open }) => {
+const SurfaceHeader = ({ handleDrawerToggle,handleDrawerClose,handleDrawerOpen, open }) => {
   const theme = useTheme();
+
+    const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+    const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+    const isMd = useMediaQuery(theme.breakpoints.only('md'));
+    const isLg = useMediaQuery(theme.breakpoints.only('lg'));
+    const isXl = useMediaQuery(theme.breakpoints.only('xl'));
+
   const { logout } = useAuth();
   function logoutSurHead(){
     Cookies.remove('userRole');
     logout();
     
   }
+
+  useEffect(() => {
+             
+    handleDrawerClose();
+  }, [isXs,isSm]);
 
 
   // Appbar
@@ -167,13 +183,18 @@ const renderMenu = (
       <AppBar position="fixed" open={open} >
         <Toolbar>
         <DrawerHeader  className={styles.drawerheaderleft}>
+          {
+             (isXs || isSm) && <Image onClick={handleDrawerToggle} src="/images/pages/common/cloud-icon.png" alt="Logo"  width={40} height={40} />
+          }
+        
       {
             !open && 
             <span onClick={handleDrawerOpen} style={{ display: 'inline-block', height: '35px', width: '35px', backgroundColor: 'transparent' }}></span>
       
       }
 
-     
+
+           
 
         
       </DrawerHeader>

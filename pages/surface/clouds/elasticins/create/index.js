@@ -68,6 +68,9 @@ import Carousel from 'better-react-carousel'
 // ** Custom CSS 
 import styles from './index.module.css';
 
+
+
+
 // TextField Custom Style
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -186,7 +189,7 @@ const ModalFormControl = styled(FormControl)({
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
-    width: '600px',
+    // width: '600px',
   },
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
@@ -242,28 +245,31 @@ const MenuProps = {
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#e1f3f6',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 }));
 
 // ** Table Function
-function createData(id,disk, type, size, cost, action) {
-  return { id,disk, type, size, cost, action };
+function createData(id, disk, type, size, cost, action) {
+  return { id, disk, type, size, cost, action };
 }
 
 const rows = [
   createData(
     "0",
-  <Box variant="text" align="left" className={styles.diskBox}>Boot Disk</Box>, 
+  <Box variant="text" align="left" className={styles.diskBox}><Box className={styles.tableScrollBox}>Boot Disk</Box></Box>, 
   <CssFormControl className={styles.diskSizeBox} size="small">
-    <Select defaultValue="" id="grouped-select-0"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps={MenuProps}>
+    <Select className={styles.tableScrollSelect} defaultValue="" id="grouped-select-0"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps={MenuProps}>
       <MenuItem value="">Select</MenuItem>
       <MenuItem value={1}>NVMe</MenuItem>
     </Select>
   </CssFormControl>, 
-  <Box variant="text" align="center" className={styles.diskBox}><RemoveCircleIcon className={styles.DiskSizeMinus} /> 20 GB <AddCircleOutlinedIcon 
-   className={styles.DiskSizePlus} /></Box>, 
-  <Box variant="text" align="left" className={styles.diskBox}>9.20</Box>, 
+  <Box variant="text" align="center" className={styles.diskBox}><Box className={styles.tableScrollBox}><RemoveCircleIcon className={styles.DiskSizeMinus} /> 20 GB <AddCircleOutlinedIcon className={styles.DiskSizePlus} /> </Box></Box>, 
+  <Box variant="text" align="left" className={styles.diskBox}><Box className={styles.tableScrollBox}>9.20</Box></Box>, 
   <Box sx={{marginTop: '10px',}}><RemoveCircleIcon sx={{ cursor: 'pointer', color: '#b0b0b0'}} /></Box>),
+  
   createData(
     "1",
     <Box variant="text" align="left" className={styles.diskBox}>Boot Disk</Box>, 
@@ -493,7 +499,7 @@ function Cintstance() {
             </TabList>
             <TabPanel value='1' sx={{ padding: '24px 0px', mt: '35px' }} >
               <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={2} spacing={3}>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                   <Card variant='outlined' sx={{mt:2, borderRadius:'7px'}} className={`${styles.CarouselCard}`}>
                     <CardContent sx={{ padding: '24px' }}>
                       <Box component="img" align="center" alt="High Intensive" className={`${styles.CarouselImg} ${styles.CarouselImgMargin}`} 
@@ -507,7 +513,7 @@ function Cintstance() {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                   <Card variant='outlined' sx={{mt:2, borderRadius:'7px'}} className={`${styles.CarouselCard} ${styles.CardAnimation}`}>
                     <CardContent sx={{ padding: '24px' }}>
                       <Box component="img" align="center" alt="Intensive" className={`${styles.CarouselImg} ${styles.CarouselImgMargin}`} 
@@ -521,7 +527,7 @@ function Cintstance() {
                     </CardContent>
                   </Card>
                 </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
                   <Card variant='outlined' sx={{mt:2, borderRadius:'7px'}} className={`${styles.CarouselCard} ${styles.CardAnimation} 
                     ${styles.CarouselActiveSelect}`}>
                     <CardContent sx={{ padding: '24px' }}>
@@ -570,7 +576,8 @@ function Cintstance() {
               <Tab value='Storage' label='Storage Optimized' disabled />
             </TabList>
             <TabPanel value='General' sx={{ padding: '24px 0px' }}>
-              <Carousel cols={5} rows={1} gap={15} showDots={true} hideArrow={true} loop dot={MyDot}>
+              <Carousel containerStyle={{display:"grid"}} cols={5} rows={1} gap={15}  mobileBreakpoint={768} scrollSnap={true} showDots={true} 
+                hideArrow={true} loop={true} dot={MyDot}>
                 <Carousel.Item sx={{ overflow: 'auto'}}>
                   <Card variant='outlined' sx={{mt:2, borderRadius:'7px'}} className={`${styles.CarouselCard} ${styles.cardActive}`}>
                     <CardHeader className={styles.ProfileCardHeader} title={ <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 
@@ -702,7 +709,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-2"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -722,7 +729,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-3"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -742,7 +749,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-4"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                          {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -762,7 +769,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-5"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -782,7 +789,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-6"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -802,7 +809,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-7"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -822,7 +829,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-8"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -842,7 +849,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-9"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -862,7 +869,7 @@ function Cintstance() {
                     <Divider />
                     <CardActions>
                       <CssFormControl fullWidth size="small">
-                        <Select defaultValue="" id="grouped-select-10"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                        <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                           {MenuProps}>
                           <MenuItem value="">Select</MenuItem>
                           <MenuItem value={1}>22.04 (LTS) x64</MenuItem>
@@ -891,7 +898,7 @@ function Cintstance() {
         <CardContent sx={{ padding: '0 24px 24px 24px '}}>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <TableContainer component={Paper} variant="outlined">
-              <Table aria-label="simple table">
+              <Table aria-label="simple table" sx={{ overflowX: 'scroll' }}>
                 <TableHead>
                   <TableRow>
                     <StyledTableCell>Disk</StyledTableCell>
@@ -917,16 +924,58 @@ function Cintstance() {
           </Grid>
         </CardContent>
       </Card>
-     
+      {/* Start Instance Here */}
+      <Card sx={{mt:2, borderRadius:'7px', position: 'relative', overflow: 'initial'}}>
+        <CardContent sx={{ padding: '24px'}}>
+          <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={2} spacing={3}>
+            <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={4} lg={4} xl={4}>
+              <Typography component="h4" variant="h5" align="left" fontSize={20}>Instance Label / Hostname</Typography>
+              <Box className={styles.InstanceInfoIcon}>
+                <InfoIcon sx={{ width: '30px', height: '30px' }} ></InfoIcon>
+                <Card sx={{mt:2, borderRadius:'7px', overflow: 'initial'}} className={styles.InstanceInfoDetail}>
+                  <CardContent sx={{ padding: '24px'}}>
+                    <Typography component="p" variant="p" align="left" fontSize={16}>Hostname must contain only alphanumeric characters and 
+                    hyphens.</Typography>
+                    <Typography component="p" variant="p" align="left" pt={1} fontSize={16}>Length can be 3 to 15 characters long.</Typography>
+                  </CardContent>
+                </Card>
+              </Box>
+              <CssTextField margin="normal" fullWidth value='Ubuntu-338556' id="instance" name="instance" />
+            </Grid>
+            <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={4} lg={4} xl={4}>
+              <Typography component="h4" variant="h5" align="left" fontSize={20}>Team</Typography>
+              <InstanceFormControl margin="normal" fullWidth >
+                <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                  {MenuProps}>
+                  <MenuItem value="">Select Team</MenuItem>
+                  <MenuItem value={1}>Default</MenuItem>
+                  <MenuItem value={2}>Admin</MenuItem>
+                </Select>
+              </InstanceFormControl>
+            </Grid>
+            <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={4} lg={4} xl={4}>
+              <Typography component="h4" variant="h5" align="left" fontSize={20}>Tags</Typography>
+              <InstanceFormControl margin="normal" fullWidth >
+                <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                  {MenuProps}>
+                  <MenuItem value="">Select Tags</MenuItem>
+                  <MenuItem value={1}>Default</MenuItem>
+                  <MenuItem value={2}>Network</MenuItem>
+                </Select>
+              </InstanceFormControl>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
       {/* Start Private Network Here */}
       <Card sx={{mt:2, borderRadius:'7px', position: 'relative', overflow: 'initial'}}>
         <CardContent sx={{ padding: '24px'}}>
           <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={2} spacing={3}>
             <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={4} lg={4} xl={4}>
-              <Typography component="h4" variant="h5" align="left" fontSize={20}>Private Network <AddCircleOutlinedIcon 
-                className={styles.AddNetworkIcon} onClick={handleClickOpen} /> </Typography>
+              <Typography component="h4" variant="h5" align="left" fontSize={20} sx={{ position: 'relative' }}>Private Network 
+              <AddCircleOutlinedIcon className={styles.AddNetworkIcon} onClick={handleClickOpen} /> </Typography>
               <InstanceFormControl margin="normal" fullWidth >
-                <Select defaultValue="" id="grouped-select-13"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} 
+                <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} 
                   MenuProps={MenuProps}>
                   <MenuItem value="">Select Network</MenuItem>
                   <MenuItem value={1}>ECCADE-ORGROU-DFNW01</MenuItem>
@@ -1047,7 +1096,7 @@ function Cintstance() {
             <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={4} lg={4} xl={4}>
               <Typography component="h4" variant="h5" align="left" fontSize={20}>IP Mode</Typography>
               <InstanceFormControl margin="normal" fullWidth >
-                <Select defaultValue="" id="grouped-select-14"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
+                <Select defaultValue="" id="grouped-select"  displayEmpty inputProps={{ 'aria-label': 'Without label' }} MenuProps= 
                   {MenuProps}>
                   <MenuItem value="">Select Mode</MenuItem>
                   <MenuItem value={1}>Static IP Pools</MenuItem>
@@ -1119,18 +1168,20 @@ function Cintstance() {
                   <Box sx={{ display: 'flex'}}>
                     <InfoIcon sx={{ fontSize: '35px', color: '#015578', mt: '55px'}} />
                     <List>
-                        <ListItem sx={{color: '#6b6f82', fontSize: '10px', pt: 0, pb: 0}}>
-                          <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must be at least 8 characters long</ListItemText>
-                        </ListItem>
-                        <ListItem sx={{color: '#6b6f82', fontSize: '10px', pt: 0, pb: 0}}>
-                          <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 uppercase letter</ListItemText>
-                        </ListItem>
-                        <ListItem sx={{color: '#6b6f82', fontSize: '10px', pt: 0, pb: 0}}>
-                          <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 number</ListItemText>
-                        </ListItem>
-                        <ListItem sx={{color: '#6b6f82', fontSize: '10px', pt: 0, pb: 0}}>
-                          <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 special character</ListItemText>
-                        </ListItem>
+                      <Typography component="h6" variant="h5" align="left" fontSize={14} sx={{paddingLeft: '18px', color: '#000', 
+                      fontWeight: '400'}}>PASSWORD REQUIREMENTS</Typography>
+                      <ListItem sx={{color: '#6b6f82', fontSize: '10px!important', pt: 0, pb: 0}}>
+                        <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must be at least 8 characters long</ListItemText>
+                      </ListItem>
+                      <ListItem sx={{color: '#6b6f82', fontSize: '10px!important', pt: 0, pb: 0}}>
+                        <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 uppercase letter</ListItemText>
+                      </ListItem>
+                      <ListItem sx={{color: '#6b6f82', fontSize: '10px!important', pt: 0, pb: 0}}>
+                        <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 number</ListItemText>
+                      </ListItem>
+                      <ListItem sx={{color: '#6b6f82', fontSize: '10px!important', pt: 0, pb: 0}}>
+                        <ListItemText><FiberManualRecordIcon sx={{ fontSize: '10px'}} /> Must contain 1 special character</ListItemText>
+                      </ListItem>
                     </List>
                   </Box>
                 </Grid>
@@ -1143,50 +1194,52 @@ function Cintstance() {
         </CardContent>
       </Card>
       {/* Start Fixed Footer Here */}
-
-      <Card sx={{mt:15, borderRadius:'7px',}}>
-        
       <Box className={styles.Footer}>
-        <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={1} spacing={1}>
-          <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={1} spacing={1}>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={3} lg={3} xl={3}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" rowSpacing={1} spacing={2}>
+          <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+            <Grid container direction="row" rowSpacing={1} spacing={0}>
+              <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                 <Typography component="h4" variant="h5" align="center" alignItems={'center'} fontSize={20} color={'#fff'} 
-                mt={3}>Summary</Typography>
+                sx={{mt: '20px'}}>Summary</Typography>
               </Grid>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={3} lg={3} xl={3}>
-                <Typography component="p" variant="p" color={'#d7d7d7'} fontSize={14} align="center" sx={{pt: 1, pb:2}}>Operating 
-                System</Typography>
-                <Typography component="h4" variant="h5" align="center" alignItems={'center'} fontSize={16} color={'#fff'}>Ubuntu 22.04 (LTS) 
-                 x64</Typography>
+              <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
+                <Typography component="p" variant="p" color={'#6DCCDD'} fontSize={14} align="left" sx={{pt: 1, pb:2}}>Operating System</Typography>
+                <Typography component="h4" variant="h5" align="left" alignItems={'left'} fontSize={16} color={'#fff'} className={styles.textnowrap} 
+                title={'Ubuntu 22.04 (LTS) x64'}>Ubuntu 22.04 (LTS) x64</Typography>
               </Grid>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={3} lg={3} xl={3}>
-                <Typography component="p" variant="p" color={'#d7d7d7'} fontSize={14} align="center" sx={{pt: 1, pb:2}}>Location</Typography>
-                <Typography component="h4" variant="h5" align="center" alignItems={'center'} fontSize={16} color={'#fff'}>Riyadh</Typography>
-              </Grid>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={3} lg={3} xl={3}>
-                <Typography component="p" variant="p" color={'#d7d7d7'} fontSize={14} align="center" sx={{pt: 1, pb:2}}>Specification</Typography>
-                <Typography component="h4" variant="h5" align="center" alignItems={'center'} fontSize={16} color= 
-                {'#fff'}>2vCPU/4GB/20G</Typography>
+              <Grid item xs={6} sm={6} md={4} lg={4} xl={4}>
+                <Typography component="p" variant="p" color={'#6DCCDD'} fontSize={14} align="left" sx={{pt: 1, pb:2, pl: 2}}>Location</Typography>
+                <Box sx={{display: 'flex', pl: 2}}>
+                  <Box component="img" width={20} height={20} mr={1} align="center" alt="ubundu" 
+                    src="/images/pages/surface/clouds/elasticins/create/riyadh.png" />
+                  <Typography component="h4" variant="h5" align="left" alignItems={'left'} fontSize={16} color={'#fff'} 
+                  className={styles.textnowrap}>Riyadh</Typography>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Grid sx={{mt:'0px', borderRadius:'7px'}} container direction="row" rowSpacing={1} spacing={1}>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={5} lg={5} xl={5}>
-                <Typography component="p" variant="p" color={'#d7d7d7'} fontSize={14} align="center" sx={{pt: 1, pb:2}}>Estimated Cost</Typography>
-                <Typography component="h4" variant="h5" align="center" alignItems={'center'} fontSize={16} color={'#fff'}>
-                SAR 178.33 /Month</Typography>
+          <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+            <Grid container direction="row" rowSpacing={1} spacing={0}>
+              <Grid item xs={6} sm={6} md={4} lg={4} xl={4} align="center" alignItems={'center'}>
+                <Typography component="p" variant="p" color={'#6DCCDD'} fontSize={14} align="left" sx={{pt: 1, pb: 2}}>Specification</Typography>
+                <Typography component="h4" variant="h5" align="left" alignItems={'left'} fontSize={16} color={'#fff'} 
+                className={styles.textnowrap}>2vCPU/4GB/20G</Typography>
               </Grid>
-              <Grid item sx={{pt: '0 !important' }} xs={12} sm={12} md={5} lg={5} xl={5}>
+              <Grid item xs={6} sm={6} md={4} lg={4} xl={4} align="center" alignItems={'center'}>
+                <Typography component="p" variant="p" color={'#6DCCDD'} fontSize={14} align="left" sx={{pt: 1, pb:2}}>Estimated Cost</Typography>
+                <Typography component="h4" variant="h5" align="left" alignItems={'left'} fontSize={16} color={'#fff'} sx={{display: 'flex'}}
+                className={styles.textnowrap}><Box sx={{fontSize: '10px', pr:1, marginTop: '7px'}}>SAR</Box> 178.33 <Box sx={{fontSize: '10px', 
+                pl:1, marginTop: '7px'}}>/Month</Box> 
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4} xl={4} align="center" alignItems={'center'}>
                 <Button size="md" variant="solid" sx={{ color:'#fff', backgroundImage: 'linear-gradient(45deg, #0288d1, #26c6da) !important', 
-                mt: 2.5, }}>Deploy</Button>
+                mt: 2, }}>Deploy</Button>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Box>
-      </Card>
 
     </SurfaceLayout>
   );

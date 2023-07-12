@@ -1,38 +1,39 @@
 .logoimage {
-    width: 170px;
-    height: auto;
-  }
+  /* width: 170px;
+  height: auto; */
+  height: 25px;
+}
 
-  .NavLink {
-    color: #000;
-    text-decoration: none;
+.NavLink {
+  color: #000;
+  text-decoration: none;
 }
 
 /* scrollbar track */
 .listContainer::-webkit-scrollbar {
-  width: 8px; /* width of the scrollbar */
+width: 8px; /* width of the scrollbar */
 }
 
 /* scrollbar thumb */
 .listContainer::-webkit-scrollbar-thumb {
-  background: #888; /* color of the scrollbar thumb */
-  border-radius: 4px; /* roundness of the scrollbar thumb */
+background: #888; /* color of the scrollbar thumb */
+border-radius: 4px; /* roundness of the scrollbar thumb */
 }
 
 /* scrollbar thumb on hover */
 .listContainer::-webkit-scrollbar-thumb:hover {
-  background: #555; /* color of the scrollbar thumb on hover */
+background: #555; /* color of the scrollbar thumb on hover */
 }
 
 /* scrollbar track */
 .listContainer::-webkit-scrollbar-track {
-  background: #f1f1f1; /* color of the scrollbar track */
+background: #f1f1f1; /* color of the scrollbar track */
 }
 
 .drawerheaderleft {
-  text-align: left;
+text-align: left;
 }
 
 .contentWrapper{
-  background: linear-gradient(45deg,#013850,#0773a5) !important;
+background: linear-gradient(45deg,#013850,#0773a5) !important;
 }

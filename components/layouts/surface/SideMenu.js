@@ -19,7 +19,7 @@ import Image from 'next/image';
 import styles from './SideMenu.module.css';
 import Link from 'next/link';
 
-
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // ** Nav Styles
 const DetaNav = styled(List) ({
@@ -97,6 +97,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 const SideMenu = ({ currentPage, children, setBackgrd }) => {
+
+ 
+
+
   console.log(setBackgrd);
   console.log(currentPage);
   const [selectedIndex, setSelectedIndex] = useState(currentPage);
@@ -105,6 +109,13 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
   };
 
     const theme = useTheme();
+
+    const isXs = useMediaQuery(theme.breakpoints.only('xs'));
+    const isSm = useMediaQuery(theme.breakpoints.only('sm'));
+    const isMd = useMediaQuery(theme.breakpoints.only('md'));
+    const isLg = useMediaQuery(theme.breakpoints.only('lg'));
+    const isXl = useMediaQuery(theme.breakpoints.only('xl'));
+
     const [open, setOpen] = useState(true);
     const [nestedOpen, setNestedOpen] = useState(true);
 
@@ -120,46 +131,16 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
         setNestedOpen(!nestedOpen);
       };
       
-  return (
-   
-    <Box sx={{ display: 'flex' }}>
-      <SurfaceHeader handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen} open={open} />
-      <Drawer variant="permanent" open={open} >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: 1, }} >
-          <DrawerHeader>
-            {
-              open ?
-              <Image
-              src="/images/pages/common/deta-cloud-logo.png" // Path to your image file
-              alt="My Image"
-              
-              onClick={handleDrawerClose}
-              
-              width={150} 
-              height={35}
 
-            />
+      const boxStyles = {
+        
+        display: { xs: 'none', sm: 'none', md: 'block' },
+        
+      };
 
-              
-              :
-              <Image
-              src="/images/pages/common/cloud-icon.png" // Path to your image file
-              alt="My Image"
-              
-              onClick={handleDrawerOpen}
-              width={40} 
-              height={40}
-            />
+      
 
-              
-            }
-
-            {
-              open &&
-              <IconButton onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}</IconButton>
-            }
-          </DrawerHeader>
-        </Box>
+      const CommonMmenu = () => (
         <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', pl:1, pr:1, // Hide overflow by default
             '&:hover': {
               overflow: 'auto', // Show overflow when hovering over the side menu
@@ -334,11 +315,76 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
             </ListItemButton>
           </DetaNav>
         </Box>
+      );
+
+
+      const [mobileOpen, setMobileOpen] = useState(false);
+
+      const handleDrawerToggle = () => {
+        console.log("coming");
+        console.log(mobileOpen);
+        setMobileOpen(!mobileOpen);
+      };
+
+
+  return (
+   
+    <Box  sx={{ display: 'flex' }}>
+      <SurfaceHeader handleDrawerToggle={handleDrawerToggle} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen} open={open} />
+      
+      <MuiDrawer
+          anchor={'left'}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          
+          ModalProps={{
+            keepMounted: false, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'block', md: 'none' },
+            
+          }}
+        >
+           <Box  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: 1, }} >
+        <DrawerHeader>
+        <Image src="/images/pages/common/cloud-icon.png" alt="Logo" onClick={handleDrawerOpen} width={40} height={40} />
+        <Image src="/images/pages/common/deta-cloud-logo.png" className={styles.logoimage} alt="Logo" onClick={handleDrawerClose} width= 
+               {150} height={25} />
+                
+          </DrawerHeader>
+
+        </Box>
+        
+          <CommonMmenu />
+           </MuiDrawer>
+           
+      <Drawer variant="permanent" open={open} sx={boxStyles}>
+        <Box  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: 1, }} >
+        <DrawerHeader>
+            {
+              open ?
+              <Image src="/images/pages/common/deta-cloud-logo.png" className={styles.logoimage} alt="Logo" onClick={handleDrawerClose} width= 
+               {150} height={25} />
+              :
+              <Image src="/images/pages/common/cloud-icon.png" alt="Logo" onClick={handleDrawerOpen} width={40} height={40} />
+            }
+            {
+              open &&
+              <IconButton sx={{ left: '6px' }} onClick={handleDrawerClose}>{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />} 
+              </IconButton>
+            }
+          </DrawerHeader>
+
+        </Box>
+        <CommonMmenu />
       </Drawer>
+      
       <Box component="main"  sx={setBackgrd ? {  position: 'relative',
     width: '100%',
     height: '185px', flexGrow: 1, p: 3, background: 'linear-gradient(45deg, #013850, #0773a5) !important' }  :{ flexGrow: 1, p: 3} }  >
         <DrawerHeader />
+        
         <div >{children}</div>
       </Box>
     </Box>
