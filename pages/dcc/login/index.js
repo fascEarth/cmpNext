@@ -225,7 +225,7 @@ function Login() {
           secure: true, // Set "secure" only in production
           sameSite: 'strict', // Adjust sameSite value based on your requirements
         });
-        if (sdata.legal_status && sdata.completed_stepper == 5) {          
+        if (sdata.tenant_active_status && sdata.legal_status && sdata.completed_stepper == 5) {          
             if(!sdata.email_verify){
               setIsLoading(false);
               seteverify(true);              

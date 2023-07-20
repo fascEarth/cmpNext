@@ -101,8 +101,7 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
  
 
 
-  console.log(setBackgrd);
-  console.log(currentPage);
+  
   const [selectedIndex, setSelectedIndex] = useState(currentPage);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
@@ -321,8 +320,7 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
       const [mobileOpen, setMobileOpen] = useState(false);
 
       const handleDrawerToggle = () => {
-        console.log("coming");
-        console.log(mobileOpen);
+        
         setMobileOpen(!mobileOpen);
       };
 
@@ -348,8 +346,8 @@ const SideMenu = ({ currentPage, children, setBackgrd }) => {
         >
            <Box  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: 1, }} >
         <DrawerHeader>
-        <Image src="/images/pages/common/cloud-icon.png" alt="Logo" onClick={handleDrawerOpen} width={40} height={40} />
-        <Image src="/images/pages/common/deta-cloud-logo.png" className={styles.logoimage} alt="Logo" onClick={handleDrawerClose} width= 
+        <Image src="/images/pages/common/cloud-icon.png" alt="Logo"  width={40} height={40} />
+        <Image src="/images/pages/common/deta-cloud-logo.png" className={styles.logoimage} alt="Logo"  width= 
                {150} height={25} />
                 
           </DrawerHeader>

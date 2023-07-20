@@ -200,7 +200,7 @@
   cursor: pointer;
 }
 .PopoveBoxContainer {
-  max-width: 550px !important;
+  max-width: 435px !important;
 }
 .PopoverHeader {
   width: auto;
@@ -288,10 +288,20 @@
 
 @media only screen and (max-width: 768px) {
   .InstanceInfoDetail { 
-      width: auto;
+      width: auto;      
   }
 }
 
-.responsiveSelect {
-  width: 100%; /* Make the select box full width on mobile devices */
+@media only screen and (max-width: 425px) {
+  .InstanceInfoDetail {       
+      left: unset;
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .InstanceInfoIcon {
+    margin-left: 0px;
+    margin-top: 0px;
+    position:unset;
+  }
 }

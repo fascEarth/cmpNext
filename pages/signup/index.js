@@ -211,7 +211,7 @@ function Signup() {
     setActiveStep(prevActiveStep => prevActiveStep - 1)
   }
 
-  const [cachedInfo, setcachedInfo] = useState(false);
+  const [cachedInfo, setcachedInfo] = useState({});
   const cookies = Cookies.get('userData') 
   const [paymentDone, setpaymentDone]  = useState(false);
   const [commonProStatus,setcommonProStatus] = useState(false);
@@ -224,6 +224,10 @@ function Signup() {
     return getStepContent(activeStep)
   }
   
+  useEffect(() => {
+    Cookies.set('userData', JSON.stringify(cachedInfo));
+  }, [cachedInfo]);
+
   useEffect(() => {
     
     const cachData = (cookies? JSON.parse(cookies) : false);
@@ -256,7 +260,7 @@ function Signup() {
     
   
   
-  }, [cookies]);
+  }, []);
 
   const [commonLegalStatus, setcommonLegalStatus] = useState(false);
   const handlecommonLegalStatusChange = (newVariable) => {
@@ -298,11 +302,16 @@ function Signup() {
   const [cvEmailshowVerified, setcvEmailshowVerified]  = useState(false); 
   const [cvMobshowVerified, setcvMobshowVerified]  = useState(false); 
   async function precallFinProvision(){
+    const cookies = Cookies.get('userData')  
+        const cachData = (cookies? JSON.parse(cookies) : false);
+        
+        cachData.completed_stepper = 5;
+        Cookies.set('userData', JSON.stringify(cachData)); 
     setActiveStep(activeStep + 1);
     callFinProvision();
   }
   async function callFinProvision(){
-    
+    const cachedInfo = JSON.parse(cookies);
     const finalData = {data:[],tenantId:cachedInfo.tenant_id, userSerialId:cachedInfo.user_serial_id,endPoint:"finalProvisioning"}
     try {
       const { data } = await axios.post('/api/signup', finalData); // call the new API route
@@ -348,14 +357,20 @@ function Signup() {
         setcvEmailshowVerified(true); 
         const cookies = Cookies.get('userData')  
         const cachData = (cookies? JSON.parse(cookies) : false);
-        cachData.email_verify = true;
+        /*cachData.email_verify = true;
         if( cvMobshowVerified){
           
           cachData.completed_stepper = 3;
-        }
-        setTimeout(function(){
+        }*/
+        setcachedInfo(prevUserData => ({
+          ...prevUserData,
+          email_verify: true,          
+          completed_stepper: cvMobshowVerified ? 3 : prevUserData.completed_stepper
+        }));
+        /*setTimeout(function(){
           Cookies.set('userData', JSON.stringify(cachData)); 
-        },300);
+        },300);*/
+        
         
         
         toast.success('Success');  
@@ -409,15 +424,22 @@ function Signup() {
           setcvMobshowVerified(true); 
           const cookies = Cookies.get('userData')  
           const cachData = (cookies? JSON.parse(cookies) : false);
-          cachData.sms_verify = true;
-          cachData.mobile_no = cvMob;
-          if(cvEmailshowVerified){
+          //cachData.sms_verify = true;
+          //cachData.mobile_no = cvMob;
+         /* if(cvEmailshowVerified){
             
             cachData.completed_stepper = 3;
-          }
-          setTimeout(function(){
+          }*/
+          setcachedInfo(prevUserData => ({
+            ...prevUserData,
+            sms_verify: true,
+            mobile_no: cvMob,
+            completed_stepper: cvEmailshowVerified ? 3 : prevUserData.completed_stepper
+          }));
+          /*setTimeout(function(){
+            
             Cookies.set('userData', JSON.stringify(cachData)); 
-          },300);
+          },300);*/
           
           
         
