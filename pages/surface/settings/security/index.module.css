@@ -1,0 +1,77 @@
+/********** Tab CSS **********/
+.tabContainer { 
+    width: 100%;
+    height: 65px;
+    position: relative;
+    display: flex;
+    margin: 0 auto 0 auto;
+    padding: 0 15px;
+    white-space: nowrap;
+    background-color: transparent;
+    border-radius: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.tabButton {
+    font-size: 16px;
+    text-transform: capitalize;
+}
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.otpnum input[type=number]::-webkit-inner-spin-button, 
+.otpnum input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/************ Skeleton CSS **********/
+.SkeletonSearchContainer {
+    position: absolute;
+    display: flex;
+    top: -8px;
+    right: -10px;
+    cursor: pointer;
+}
+.SkeletonAddIcon {
+    color: #015578;
+    margin-right: 15px;
+    margin-top: 3px;
+    font-size: 30px;
+}
+
+/* TR Sanjai */
+.loadingBtn {
+    width: 28px;
+    height: 28px;
+    animation: animate 2s linear infinite;
+    margin-right: 10px;
+}
+.loginBtn {
+    border-radius: 7px;
+    background-color:#015578;
+    color: #fff;
+ }
+ .loginBtn:hover {
+    background-color: #016d99;
+}
+@keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+/* TR Sanjai */
+
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) { 
+    .SkeletonSearchContainer {
+        position: relative;
+        top: 7px;
+        right: 0;
+    }
+    .SerachSkeleton {
+        width: 95% !important;
+    }
+}

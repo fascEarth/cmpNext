@@ -1,4 +1,3 @@
-
 .logo {
     width: 250px;
     display: flex;
@@ -9,11 +8,11 @@
     text-decoration: none;
 }
 .registerBtn {
-    border-radius: 7px;
-    background-color:#015578;
+    border-radius: 7px !important;
+    background-color:#015578 !important;
 }
 .registerBtn:hover {
-    background-color: #016d99;
+    background-color: #016d99 !important;
 }
 
  /********** Tab Css *********/
@@ -23,27 +22,126 @@
 }
 .tabFirst {
     width: 50%;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.87);
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
+    text-align: center !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+    border-top-left-radius: 7px !important;
+    border-bottom-left-radius: 7px !important;
 }
 .tabFirst:hover {
-    background-color: #6DCCDD;
-    border-top-left-radius: 7px;
-    border-bottom-left-radius: 7px;
+    background-color: #6DCCDD !important;
+    border-top-left-radius: 7px !important;
+    border-bottom-left-radius: 7px !important;
 }
 .tabSecond {
     width: 50%;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.87);
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    text-align: center !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+    border-top-right-radius: 7px !important;
+    border-bottom-right-radius: 7px !important;
 }
 .tabSecond:hover {
-    background-color: #6DCCDD;
-    border-top-right-radius: 7px;
-    border-bottom-right-radius: 7px;
+    background-color: #6DCCDD !important;
+    border-top-right-radius: 7px !important;
+    border-bottom-right-radius: 7px !important;
 }
 
 
+.loginBg {
+    background-image: url(../../../public/images/pages/dcc/common/loginBg.png);
+    background-repeat: no-repeat;
+    background-color: linear-gradient(45deg,#013850,#0773a5);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+ }
+ .verticalCenter {
+     height: 100%;
+     display: flex;
+     padding: 30px;
+     justify-content: center;
+     align-items: center;
+ }
+
+
+
+ /********** TR01 **********/
+ .errorText {
+    margin-left: 0;
+    margin-top: 9px;
+ }
+ .loadingBtn {
+    width: 28px;
+    height: 28px;
+    animation: animate 2s linear infinite;
+    margin-right: 10px;
+ }
+ @keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+ }
+
+ /* BUG FIXING */
+.pageWrapper {
+    width: 100%;
+    display: flex;
+    background: linear-gradient(45deg,#013850,#0773a5) !important;
+}
+.ResMdDevice {
+    position: relative;
+}
+ /********** TR01 **********/
+
+
+ /********** Rsponsive CSS **********/
+
+ @media (max-width: 768px) {
+     .verticalCenter {
+         max-width: 450px;
+         width: 100%;
+     }
+     .ResMdDevice {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+     }
+ }
+
+
+
+
+ /********** TR01 Responsive **********/
+
+@media(max-width:575px) {
+    .headingTag {
+        font-size: 1.25rem;
+        padding-bottom: 10px;
+    }
+    .logo {
+        width: 75%;
+    }
+    .resFontSize span{
+        font-size: 15px !important;
+    }
+    .registerBtn  {
+        font-size: 15px;
+    }
+    .tabs {
+        min-height: 39px;
+    }
+    .tabs button {
+        min-height: 39px;
+    }
+}
+@media(max-width:359.98px) {
+   
+    .recaptcha div, .recaptcha div iframe {
+       width: 100% !important;
+    }
+    .recaptcha div .rc-anchor-normal-footer {
+        position: absolute;
+        right: 18px;
+    }
+}
+  /********** TR01 **********/

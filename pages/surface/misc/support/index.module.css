@@ -1,0 +1,9 @@
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) { 
+    .CardContent{
+        padding: 24px 10px;
+    }
+    .RoomOutlinedIcon {
+        top: -40px;
+    }
+}

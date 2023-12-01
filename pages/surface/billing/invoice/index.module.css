@@ -1,0 +1,61 @@
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.invoiceSar {
+    position: absolute; 
+    display: flex;
+    right: 8px; 
+    top: 76px;
+}
+.SarInvoiceCard {
+    width: 200px !important;
+    height: 86px;
+    margin-top: 8px;
+    margin-right: 16px;
+    border-radius: 15px !important;
+    background-color: #6DCCDD !important;
+}
+.SarAmountBg {
+    background-color: #02A099 !important;
+}
+
+/************ Skeleton CSS **********/
+.SkeletonSearchContainer {
+    position: absolute;
+    display: flex;
+    top: -8px;
+    right: -10px;
+    cursor: pointer;
+}
+.SkeletonAddIcon {
+    color: #015578;
+    margin-right: 15px;
+    margin-top: 3px;
+    font-size: 30px;
+}
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 426px) { 
+    
+    .invoiceBreadcrumbs {
+        margin: 0;
+    }
+    .invoiceSar {
+        position: relative;
+        left: 8px;
+        top: 15px;
+    }
+    .InvoiceTableCard {
+        margin-top: 40px;
+    }
+    .SkeletonSearchContainer {
+        position: relative;
+        top: 7px;
+        right: 0;
+    }
+    .SerachSkeleton {
+        width: 95% !important;
+    }
+}

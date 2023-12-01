@@ -1,0 +1,99 @@
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.IpConsumed {
+    position: absolute;
+    top: -2px;
+    left: 45%;
+    font-size: 12px;
+}
+
+/*********** Private Network Modal CSS ************/
+.fieldInfoIcon {
+    position: relative;
+    margin-left: 25px !important;
+    right: 10px;
+    font-size: 30px !important;
+    color: #015578;
+    cursor: pointer;
+}
+.PopoveBoxContainer {
+    max-width: 435px !important;
+}
+.PopoverHeader {
+    width: auto;
+    height: 25px;
+    padding: 0 10px;
+    background: #e3e3e3;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    margin: 25px 0px 10px 0px !important;
+    line-height: 27px !important;
+}
+.PopoverContent {
+    padding: 4px 32px 10px 32px;
+    color: #6b6f82 !important;
+    font-size: 12px !important;
+    font-weight: 400;
+    text-align: left !important;
+}
+.StaticIpContainer {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    padding: 16.5px 14px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+.StaticIpInfoIcon {
+    position: absolute;
+    font-size: 22px;
+    color: #015578;
+    cursor: pointer;                   
+}
+.StaticIpAddIcon {
+    position: absolute;
+    margin-top: -4px;
+    font-size: 30px !important;
+    color: #015578;
+    right: 8px;
+    cursor: pointer;                   
+}
+.IpRangeClose {
+    position: relative;
+    margin-left: 8px !important;
+    right: -6px;
+    font-size: 30px !important;
+    color: #015578;
+    cursor: pointer;
+}
+
+
+/* *************** TR 01  *************** */
+.errrorMessageText {
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+}
+.ipPoolErrosText {
+    position: absolute;
+    bottom: -11px;
+    left: 0;
+}
+@media(max-width:600px){
+    .fieldInfoIcon {
+        margin-left: 8px;
+        right: 0;
+        font-size: 24px;
+    }
+    .IpRangeClose,.StaticIpAddIcon {
+        width: 25px;
+        height: 30px;
+    }
+}
+/* *************** TR 01  *************** */

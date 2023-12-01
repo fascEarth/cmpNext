@@ -5,3 +5,15 @@
     text-align: center;
     margin-top: 20px;
   }
+  .tickMarkIcon {
+    color: #6FCCDD;
+  }
+  .welcomeImg {
+    width: 400px;
+  }
+  /************* Rsponsive CSS ************/
+@media only screen and (max-width: 425px) {
+  .welcomeImg {
+    width: 300px;
+  }
+}

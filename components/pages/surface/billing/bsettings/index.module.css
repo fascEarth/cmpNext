@@ -1,0 +1,116 @@
+/********** Tab CSS **********/
+.tabContainer { 
+    width: 100%;
+    height: 65px;
+    position: relative;
+    margin: 0 auto 0 auto;
+    padding: 0 15px;
+    white-space: nowrap;
+    background-color: transparent;
+    border-radius: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.tabButton {
+    font-size: 16px;
+    text-transform: capitalize;
+}
+.CredittabContainer { 
+    width: 100%;
+    height: 48px;
+    position: relative;
+    margin: 0 auto 0 auto;
+    padding: 0;
+    white-space: nowrap;
+    background-color: transparent;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.CreditCardActive {
+    border: 2px solid #6DCCDD !important;
+}
+.CreditCardDelete {
+   position: absolute;
+   right: 0;
+   color: #939393;
+   cursor: pointer;
+}
+.CreditCardDelete:hover { 
+    color: #da5050;
+}
+.CreditCardBtn {
+    display: flex !important;
+    color: #FFF !important;
+    margin: 25px auto 0 auto !important;
+    background-image: linear-gradient(45deg, #0288d1, #26c6da)!important;
+    border-radius: 20px !important;
+}
+.CreditCardCheckIcon {
+    width: 30px; 
+    height: 30px; 
+    /* margin: auto; */
+}
+.CheckIconVisibility {
+    visibility: hidden;
+}
+.BillingSAR {
+    width: 68px;
+    height: 56px;
+    position: relative;
+    display: inline-block;
+    left: 15px;
+    top: 17px;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #c7c7c7;
+    border-radius: 7px;
+}
+.loadingBtn {
+    width: 28px;
+    height: 28px;
+    animation: animate 2s linear infinite;
+    margin-right: 10px;
+}
+.loginBtn {
+    border-radius: 7px;
+    background-color:#015578;
+    color: #fff;
+ }
+ .loginBtn:hover {
+    background-color: #016d99;
+}
+@keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) { 
+    .CreditCardCheckIcon {
+        display: none;
+    } 
+    .smBillingEmail {
+        width: 100%;
+    }
+    .skBillingEmail {
+        width: 100% !important;
+    }
+    .smEnableBilling {
+        width: 100%;
+        margin-left: 0;
+    }
+    .EnableBillingForm {
+        display: inline-block;
+    }
+    .BillingSAR {
+        width: 100%;
+        left: 0;
+    }
+    .EnableBillingSwitch {
+        margin-top: 0;
+    }
+    
+    
+} 

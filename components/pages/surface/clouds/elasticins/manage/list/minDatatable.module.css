@@ -1,0 +1,10 @@
+/* ******* TR 01   ****** */ 
+.popupMenu a{
+    text-decoration: none;
+}
+@media(max-width:600px){
+    .DialogTitle {
+        font-size: 18px;
+        padding-bottom: 7px;
+    }
+}

@@ -1,0 +1,74 @@
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.IpConsumed {
+    position: absolute;
+    top: -2px;
+    left: 45%;
+    font-size: 12px;
+}
+
+/*********** Private Network Modal CSS ************/
+.fieldInfoIcon {
+    position: relative;
+    margin-left: 25px;
+    right: 10px;
+    font-size: 30px;
+    color: #015578;
+    cursor: pointer;
+}
+.PopoveBoxContainer {
+    max-width: 435px !important;
+}
+.PopoverHeader {
+    width: auto;
+    height: 25px;
+    padding: 0 10px;
+    background: #e3e3e3;
+    font-weight: 500;
+    font-size: 14px;
+    margin: 25px 0px 10px 0px;
+    line-height: 27px;
+}
+.PopoverContent {
+    padding: 4px 32px 10px 32px;
+    color: #6b6f82;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: left;
+}
+.StaticIpContainer {
+    width: 100%;
+    height: auto;
+    position: relative;
+    display: inline-block;
+    padding: 16.5px 14px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+.StaticIpInfoIcon {
+    position: absolute;
+    font-size: 22px;
+    color: #015578;
+    cursor: pointer;                   
+}
+.StaticIpAddIcon {
+    position: absolute;
+    margin-top: -4px;
+    font-size: 30px;
+    color: #015578;
+    right: 8px;
+    cursor: pointer;                   
+}
+.IpRangeClose {
+    position: relative;
+    margin-left: 8px;
+    right: -6px;
+    font-size: 30px;
+    color: #015578;
+    cursor: pointer;
+}

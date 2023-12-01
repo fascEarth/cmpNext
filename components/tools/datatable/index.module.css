@@ -1,0 +1,61 @@
+.TableContainer {
+    margin-top: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 7px;
+    box-shadow: none;
+}
+.AddBtn {
+    min-width: 50px;
+    padding: 0;
+    right: -8px;
+}
+.AddBtn:hover {
+    background-color: transparent !important;
+}
+.AddIcon {
+    width: 30px !important;
+    height: 30px !important;
+    color: #015578;
+}
+.AddIcon:hover { 
+    color: #0177aa;
+}
+
+/* *******  TR 01   *******/
+.tableHeaderCells {
+    position: relative;
+}
+.tableToggleIcon {
+    position: absolute;
+    /* top: 0;
+    bottom: 0;
+    margin: auto;
+    right: 0; */
+}
+
+
+/****** TR 01 RESPONSIVE ******/
+@media(min-width:768px) and (max-width:991px){
+    .AddBtn{
+        justify-content: flex-end;
+    }
+}
+@media(max-width:600px){
+    .cardHeaderInput {
+        margin-bottom: 5px;
+        margin-top: 3px;
+    }
+    .cardHeaderItem {
+        margin-left: 0;
+    }
+    .AddIcon {
+        width: 25px;
+        height: 25px;
+    }
+}
+@media only screen and (max-width: 425px) { 
+    .AddBtn {
+        right: 0;
+    }
+}
+/* *******  TR 01   *******/

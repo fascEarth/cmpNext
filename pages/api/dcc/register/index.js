@@ -1,4 +1,4 @@
-import { postPyApi,getPyApi } from "../../services/python";
+import { postPyApi } from "../../services/python";
 import { Buffer } from 'buffer';
 export default async function register(req, res) {
 
@@ -46,7 +46,7 @@ export default async function register(req, res) {
     
     
     if (counter === 0) {
-      res.status(200).json({ message: 'Maximum retries exceeded' });
+      res.status(200).json({ message: 'Error Occurred, contact administrator' });
       return;
     }
 

@@ -1,24 +1,117 @@
 
- .logo {
-     width: 250px;
-     display: flex;
-     margin: 0 auto;
- }
- .LinkCss {
-     color: #6DCCDD;
-     text-decoration: none;
- }
- .loginBtn {
-    border-radius: 7px;
-    background-color:#015578;
- }
- .loginBtn:hover {
-     background-color: #016d99;
- }
- 
-
- .otpnum input[type=number]::-webkit-inner-spin-button, 
-.otpnum input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+.logo {
+    width: 250px;
+    display: flex;
+    margin: 0 auto;
 }
+.LinkCss {
+    color: #6DCCDD;
+    text-decoration: none;
+}
+.loginBtn {
+   border-radius: 7px !important;
+   background-color:#015578 !important;
+}
+.loginBtn:hover {
+    background-color: #016d99 !important;
+}
+
+
+.otpnum input[type=number]::-webkit-inner-spin-button, 
+.otpnum input[type=number]::-webkit-outer-spin-button { 
+ -webkit-appearance: none; 
+ margin: 0; 
+}
+
+
+.loginBg {
+   background-image: url(../../../public/images/pages/dcc/common/loginBg.png);
+   background-repeat: no-repeat;
+   background-color: linear-gradient(45deg,#013850,#0773a5);
+   background-size: cover;
+   background-position: center;
+   width: 100%;
+   height: 100%;
+   position: fixed;
+}
+.verticalCenter {
+    height: 100%;
+    display: flex;
+    padding: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/********** TR01 **********/
+.rememberMeforgotPass {
+   align-items: center;
+}
+.errorText {
+   margin-left: 0;
+   margin-top: 9px;
+}
+.errorTextEmail {
+    margin-left: 0;
+   margin-top: 0;
+}
+.loadingBtn {
+   width: 28px;
+   height: 28px;
+   animation: animate 2s linear infinite;
+   margin-right: 10px;
+}
+@keyframes animate {
+   0% {transform: rotate(0deg);}
+   100% {transform: rotate(360deg);}
+}
+
+/* BUG FIXING */
+.pageWrapper {
+    width: 100%;
+    display: flex;
+    background: linear-gradient(45deg,#013850,#0773a5) !important;
+}
+.ResMdDevice {
+    position: relative;
+}
+/********** END OF TR01 **********/
+
+
+/********** Rsponsive CSS **********/
+@media (max-width: 768px) {
+    .verticalCenter {
+        max-width: 450px;
+    }
+    .ResMdDevice {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+
+ /********** TR01 Responsive **********/
+
+@media(max-width:575px) {
+   .headingTag {
+       font-size: 1.25rem;
+       padding-bottom: 10px;
+   }
+   .logo {
+       width: 75%;
+   }
+   .resFontSize {
+       font-size: 15px;
+   }
+}
+@media(max-width:359.98px) {
+   .rememberMeforgotPass {
+       flex-direction: column;
+       align-items: flex-start;
+   }
+   .LinkCss {
+       margin-top: 0;
+   }
+}
+  /********** TR01 **********/

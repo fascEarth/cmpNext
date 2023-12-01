@@ -1,0 +1,227 @@
+.BreadcrumbsLink {
+    color: #FFF;
+    text-decoration: none;
+}
+.BreadcrumbSelect {
+    width: 250px;
+    position: absolute;
+    top: 85px;
+    right: 25px;
+}
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/********** Tab CSS **********/
+.tabContainer { 
+    width: 100%;
+    height: 65px;
+    position: relative;
+    display: flex;
+    margin: 0 auto 0 auto;
+    padding: 0 15px;
+    white-space: nowrap;
+    background-color: transparent;
+    border-radius: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.tabButton {
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+/********** General Details CSS **********/
+.fieldInfoIcon {
+    position: relative;
+    margin-left: 25px !important;
+    right: 10px;
+    font-size: 30px !important;
+    color: #015578;
+    cursor: pointer;
+}
+.PopoveBoxContainer {
+    max-width: 435px !important;
+}
+.PopoverHeader {
+    width: auto;
+    height: 25px;
+    padding: 0 10px;
+    background: #e3e3e3;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    margin: 25px 0px 10px 0px !important;
+    line-height: 27px !important;
+}
+.PopoverContent {
+    padding: 4px 32px 10px 32px;
+    color: #6b6f82 !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    text-align: left !important;
+}
+.StaticIpContainer {
+    width: 100%;
+    min-height: 135px;
+    max-height: 280px;
+    position: relative;
+    display: inline-block;
+    padding: 16.5px 14px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    overflow-y: scroll;
+}
+.StaticIpInfoIcon {
+    position: absolute;
+    font-size: 22px;
+    color: #015578;
+    cursor: pointer;                   
+}
+.StaticIpAddIcon {
+    position: absolute;
+    margin-top: -4px;
+    font-size: 30px !important;
+    color: #015578;
+    right: 8px;
+    cursor: pointer;                   
+}
+.IpRangeClose {
+    position: relative;
+    margin-left: 8px;
+    right: -6px;
+    font-size: 30px;
+    color: #015578;
+    cursor: pointer;
+}
+
+/************ Skeleton CSS **********/
+.SkeletonSearchContainer {
+    position: absolute;
+    display: flex;
+    top: -8px;
+    right: -10px;
+    cursor: pointer;
+}
+.SkeletonAddIcon {
+    color: #015578;
+    margin-right: 15px;
+    margin-top: 3px;
+    font-size: 30px;
+}
+
+.loadingBtn {
+    width: 28px;
+    height: 28px;
+    animation: animate 2s linear infinite;
+    margin-right: 10px;
+}
+@keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) { 
+    .BreadcrumbSelect {
+      top: 75px;
+    }
+    .gatewayCidr{
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    /* .gatewayInput {
+        position: relative;
+        top: -30px;
+    } */
+    /* .ipRange {
+        position: relative;
+        top: -58px;
+    } */
+    .SkeletonSearchContainer {
+        position: relative;
+        top: 7px;
+        right: 0;
+    }
+    .SerachSkeleton {
+        width: 95% !important;
+    }
+    .gatewaySKInput {
+        position: relative;
+        top: 0px;
+    }
+    .SKipRange {
+        position: relative;
+        top: -18px;
+    }
+}    
+/************ TR 01 Responsive CSS ************/
+@media(max-width:600px){
+    .BreadcrumbsResponsive{
+        display: block;
+    }
+    .BreadcrumbSelect {
+        position: unset;
+        margin-top: 15px;
+    }
+    .tabButton {
+        min-width: 110px;
+    }
+    .fieldInfoIcon {
+        margin-left: 10px;
+        right: 0;
+        width: 21px;
+        height: 27px;
+    }
+    .ipv4Card{
+        border: unset;
+    }
+    .ipv4CardContent{
+        padding: 0;
+        padding-bottom: 0 !important;
+    }
+    .IpRangeClose,.StaticIpAddIcon{
+        width: 20px;
+        height: 22px;
+    }
+    
+}
+@media(max-width:425px){
+    .iprangeDesc {
+        font-size: 14px;
+        padding-right: 20px;
+    }
+    .gatewayInput {
+        margin-bottom: 0;
+    }
+    .dnsText {
+        margin-bottom: 28px;
+        font-weight: 400;
+        font-size: 16px;
+    }
+}
+.errrorMessageText {
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+    position: absolute;
+    bottom: -13px;
+}
+.IpRangeClose {
+    position: relative;
+    margin-left: 8px !important;
+    right: -6px;
+    font-size: 30px !important;
+    color: #015578;
+    cursor: pointer;
+}
+.errrorMessageTexts{
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+    bottom: -13px;
+}

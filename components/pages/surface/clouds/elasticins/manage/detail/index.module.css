@@ -1,0 +1,318 @@
+.BreadcrumbsLink {
+  color: #FFF;
+  text-decoration: none;
+}
+.BreadcrumbSelect {
+  width: 250px;
+  position: absolute;
+  top: 85px;
+  right: 25px;
+}
+.TopCardTags {
+  width: 100%;
+  height: 110px;
+  overflow-y: scroll;
+}
+.TopCardTags::-webkit-scrollbar {
+  display: none;
+}
+.TopCardTags {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.TagChip {
+  width: auto;
+  color: #FFF !important;
+  background: linear-gradient(45deg, #8e24aa, #ff6e40) !important;
+}
+.IpAddress {
+  width: 72%;
+  height: 40px;
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  margin-left: 12px;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 24px !important;
+  background: #F9F9F9;
+  border-radius: 7px;
+}
+.CopyClipBoard {
+  width: 33px !important;
+  height: 40px !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 7px;
+  text-align: center;
+  color: #015578;
+  background: #E5F2FF;
+  border-radius: 0 7px 7px 0;
+  cursor: pointer;
+}
+.textnowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.NetworkIcon {
+  position: relative;
+  cursor: pointer;
+}
+.NetworkIcon:hover .NetworkInfoIcon {
+  display: flex;
+}
+.NetworkInfoIcon {
+  width: max-content;
+  position: absolute;
+  display: none;
+  right: 0;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+/********** Tab CSS **********/
+.tabContainer { 
+  width: 100%;
+  height: 48px;
+  position: relative;
+  margin: 0 auto 0 auto;
+  padding: 0 15px;
+  white-space: nowrap;
+  background-color: #f3f3f3;
+  border-radius: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2); */
+}
+.tabButton {
+  text-transform: capitalize;
+}
+
+/************** CPU & Memory CSS ************/
+.CircleContainer {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 15px auto;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.CircleInner {
+  width: 125px;
+  height: 125px;
+  position: relative;
+  background-color: #fff;
+  border-radius: 50%;
+  font-size: 25px;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.Percentage {
+  font-size: 14px;
+  margin-top: 8px;
+  margin-left: 2px;
+}
+.BgBlue {
+  background: linear-gradient(50deg,#e0f2f1,#00e5ff)!important;
+}
+.BgOrange {
+  background: linear-gradient(50deg,#FFD580,#FF991D)!important;
+}
+.BgPurple {
+  background: linear-gradient(50deg,#E793E6,#6846C8)!important;
+}
+.BgGreen {
+  background: linear-gradient(50deg,#71f9bf,#33CE8E)!important;
+}
+.AverageBox {
+  width: 150px;
+  height: 100px;
+  position: relative;
+  padding: 20px;
+  margin: 10px auto 0 auto;
+  border-radius: 10px;
+}
+.BoxInner{
+  position: absolute;
+  display: flex;
+  top: 55%;
+  left: 50%;
+  font-size: 28px;
+  color: #FFF;
+  font-weight: 500;
+  transform: translate(-50%,-50%);
+}
+.ReadSpeed {
+  font-size: 14px;
+  margin-top: 15px;
+  margin-left: 2px;
+}
+.BoxBgOrange {
+  background: linear-gradient(45deg,#ff6f00,#ffca28)!important;
+}
+.BoxBgGreen {
+  background: linear-gradient(45deg,#43a047,#1de9b6)!important;
+}
+
+/******** Usage Graphs CSS ********/
+.UsageSelectContainer {
+  width: 200px;
+  position: absolute;
+  display: flex;
+  top: -6px;
+  right: 0px;
+  cursor: pointer;
+}
+
+/************ Storage CSS **********/
+.StorageAddDisk {
+  position: absolute;
+  display: flex;
+  top: -8px;
+  right: -10px;
+  cursor: pointer;
+}
+.StorageAddIcon{
+  color: #015578;
+  margin-right: 5px;
+  margin-top: 3px;
+  font-size: 30px !important;
+}
+.diskBox {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  padding: 10px 15px;
+  background: #F4F4F4;
+  color: #000;
+  font-size: 14px;
+  text-transform: capitalize;
+  line-height: 30px;
+  white-space: nowrap;
+}
+.diskSizeBox {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  padding: 6px 0;
+  background: #F4F4F4;
+  color: #000;
+  font-size: 14px;
+  text-transform: capitalize;
+  line-height: 30px;
+  white-space: nowrap;
+}
+.DiskSizeMinus {
+  color: #6DCCDD;
+  position: absolute;
+  left: 10px;
+  top: 13px;
+  
+}
+.DiskSizeMinus:hover {
+  color: #015578;
+}
+.DiskSizePlus {
+  color: #6DCCDD;
+  position: absolute;
+  right: 10px;
+  top: 13px;
+  cursor: pointer;
+}
+.DiskSizePlus:hover {
+  color: #015578;
+}
+/* .tableScrollBox {
+  width: 20%;
+} */
+.tableScrollBox {
+  width: 35%;
+}
+.tableScrollSelect {
+  width: 100%;
+}
+
+/************ Snapshort CSS **********/
+.SnapshotProgress {
+  width:300px;
+  height:15px;
+  border-radius: 20px;
+  background:
+   repeating-linear-gradient(135deg,#015578 0 10px,#6DCCDD 0 20px) 0/0%   no-repeat,
+   repeating-linear-gradient(135deg,#ddd    0 10px,#eee    0 20px) 0/100%;
+  animation:p3 2s infinite;
+}
+@keyframes p3 {
+    100% {background-size:100%}
+}
+
+.loadingBtn {
+  width: 28px;
+  height: 28px;
+  animation: animate 2s linear infinite;
+  margin-right: 10px;
+}
+@keyframes animate {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) { 
+  .BreadcrumbSelect {
+    top: 75px;
+  }
+  .ipContainer {
+    margin-bottom: 10px;
+  }
+  .UsageSelectContainer {
+    width: 100%;
+    position: relative;
+    top: 10px;
+    right: 0;
+  }
+  .StorageProvisioned {
+    height: auto !important;
+  }
+  .StorageAddDisk {
+    position: relative;
+    top: 7px;
+    right: 0;
+  }
+  .SnapshotProgress {
+    width: 100%;
+  }
+  .snapshotBtn {
+    width: 190px;
+    margin-bottom: 10px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .HeaderStatus {
+    margin: 5px 0;
+    justify-content: left !important;
+  }
+  .CircleHeading {
+    margin-bottom: 15px;
+  }
+  .DiskProvisioned {
+    padding: 30px 0;
+  }
+  .tableScrollBox {
+    width: 125px;
+  }
+  .tableScrollSelect {
+    width: 125px;
+  }
+}
+/* @media only screen and (min-width: 1920px) and (max-width: 2560px)  {
+  .DiskProvisioned {
+    padding: 0 50px !important;
+  }
+} */

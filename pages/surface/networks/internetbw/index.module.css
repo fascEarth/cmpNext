@@ -1,0 +1,69 @@
+.textnowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.BandwidthHeader {
+    border-right: 1px solid #ccc;
+}
+.BandwidthSAR {
+    width: 100%;
+    height: 56px;
+    position: relative;
+    display: inline-block;
+    padding: 12px;
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    background: #E5F0F4!important;
+    line-height: 34px;
+    border-radius: 7px;
+}
+
+
+
+ /********** TR01 Button Loading **********/
+ .upgradBtn:disabled{
+    background-color: rgba(0, 0, 0, 0.12);
+    background-image: unset !important;
+ }
+ .loadingBtn {
+    width: 28px;
+    height: 28px;
+    animation: animate 2s linear infinite;
+    margin-right: 10px;
+}
+@keyframes animate {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+ /********** END OF TR01 **********/
+
+
+
+/************ Responsive CSS ************/
+@media only screen and (max-width: 425px) {  
+    
+}
+@media only screen and (max-width: 768px) { 
+    .BandwidthHeader {
+        border-right: 0;
+        margin-bottom: 10px;
+    }
+    .BandwidthSAR {
+        margin-top: 10px;
+    }
+    .BandwidthSARSK {
+        margin-top: 10px;
+    }
+}
+
+
+ /**********  TR 01 RESPONSIVE **********/
+ @media(max-width:600px) {
+    .responsiveText {
+        font-size: 18px;
+    }
+ }
+
+ /********** END OF TR 01 RESPONSIVE **********/

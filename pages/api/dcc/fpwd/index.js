@@ -1,4 +1,4 @@
-import { postPyApi,getPyApi } from "../../services/python";
+import { postPyApi } from "../../services/python";
 import { Buffer } from 'buffer';
 export default async function fpwd(req, res) {
 
@@ -31,8 +31,11 @@ async function resetPwdUser(req, res){
     try {
         
         const { data } = req.body; // get data from request body
-        const encryptedPassword = Buffer.from(data.new_password, 'base64').toString('utf-8');
-        const rdata = await postPyApi('signup/reset_passwd', JSON.stringify({ ...data, new_password:encryptedPassword })); // call your api function
+        
+        const encryptedPassword = Buffer.from(data.reset_password.new_password, 'base64').toString('utf-8');
+        
+        data.reset_password.new_password = encryptedPassword;
+        const rdata = await postPyApi('signup/reset_passwd', JSON.stringify(data)); // call your api function
         
         const { status_code, task_uid } = rdata; // get task_uid from response data
     
@@ -93,7 +96,7 @@ async function verifyUserCode(req, res) {
     
     
     if (counter === 0) {
-      res.status(200).json({ message: 'Maximum retries exceeded' });
+      res.status(200).json({ message: 'Error Occurred, contact administrator' });
       return;
     }
 

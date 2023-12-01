@@ -1,23 +1,25 @@
 import SurfaceHeader from "./Header";
 import SurfaceFooter from "./Footer";
 import SideMenu from "./SideMenu";
-const SurfaceLayout = ({ setBackgrd,currentPage,children }) => {
-    return (
-      <>
-        
-        <div>
-        
+import { useContext } from "react";
+import { DrawerContext } from "../../../pages/_app";
+import { Box } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { styled, useTheme, alpha } from "@mui/material/styles";
+
+const SurfaceLayout = ({ setBackgrd, currentPage, children }) => {
+  return (
+    <>
+      <Box>
         <main>
-          <SideMenu currentPage={currentPage} setBackgrd={setBackgrd} >
-          {children}
+          <SideMenu currentPage={currentPage} setBackgrd={setBackgrd}>
+            {children}
           </SideMenu>
-          </main>
+        </main>
         <SurfaceFooter />
-      </div>
-      
-      </>
-      
-    );
-  };
-  
-  export default SurfaceLayout;
+      </Box>
+    </>
+  );
+};
+
+export default SurfaceLayout;

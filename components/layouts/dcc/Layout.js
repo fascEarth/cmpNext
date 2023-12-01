@@ -11,16 +11,9 @@ const DccLayout = ({ children }) => {
       <>
       
       <Grid container component="main" sx={{ height: '100vh' }}>
-      <CssBaseline />
-      <Grid item xs={false} sm={false} md={7} lg={8} xl={9} className={styles.loginBg} />
-      <Grid className={styles.ResMdDevice} item xs={12} sm={12} md={5} lg={4} xl={3} component={Paper} elevation={6} square>
-        <Box className={styles.verticalCenter}>
-          <Grid item xs={12} sm={12} md={12}>            
-          {children}
-          </Grid>
-        </Box>
+        <CssBaseline />
+            {children}
       </Grid>
-    </Grid>
 
       </>
 
